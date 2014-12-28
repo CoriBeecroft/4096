@@ -1,9 +1,3 @@
-//		TODO: 
-//	Make a traverse tiles function that takes in functions. 
-//	Make the two-dee tiles array into a graph instead 'cause that will be so much cooler, holmes. 
-//
-//
-
 var grid;
 $(document).ready(function(){
 	$('body').prepend("<div id='game-container'></div>")
@@ -22,14 +16,12 @@ $(document).ready(function(){
 
 		if(isValidKey(e.keyCode))
 		{
-			moveTiles("left");		//need to input direction, duh
-			addNewTile();
+		//	moveTiles("left");		//need to input direction, duh
+			grid.addNewTile();
+			grid.render();
 		}
 	})
 });
-
-
-//var tiles = [new Array(4), new Array(4), new Array(4), new Array(4)];
 
 var moveTiles = function(direction)
 {
@@ -57,7 +49,7 @@ var tileCanMove = function(tile, direction)
 	direction = direction + "";
 	direction = direction.toLowerCase();
 	var tileToCheck; 
-	//console.log(direction);
+
 	//check for empty adjacent spaces or equivalent adjacent tiles
 	switch (direction)
 	{
@@ -71,7 +63,6 @@ var tileCanMove = function(tile, direction)
 			console.log("oddling");
 		default:
 			console.log("oddling");				 
-
 	}
 }
 

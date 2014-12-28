@@ -25,9 +25,10 @@ Grid.prototype.buildGrid = function()
 Grid.prototype.addNewTile = function()					//maybe return -1 if no tile is added.  
 {
 	var cell = this.findEmptyCell();
+	
 	if(cell)
 	{
-		cell.tile = new Tile(cell.xPosition, cell.yPosition);		
+		cell.tile = new Tile(cell.xPosition, cell.yPosition);
 	}
 }
 
@@ -60,11 +61,6 @@ Grid.prototype.findEmptyCell = function()						//This probably needs to be teste
 	
 }
 
-Grid.prototype.isFull = function()
-{
-
-}
-
 Grid.prototype.getCell = function(xPosition, yPosition)
 {
 	var current = this.origin;
@@ -84,7 +80,8 @@ Grid.prototype.getCell = function(xPosition, yPosition)
 
 Grid.prototype.render = function()
 {
-	var grid = $("<div class='grid'></div>");
+	var grid = $('div.grid').length > 0 ? $('div.grid') : $("<div class='grid'></div>");			//There might be a better way to do this bit. 
+	grid.empty();
 	$('div#game-container').append(grid);
 	
 	for(var i=0; i<this.xDimension; i++)
