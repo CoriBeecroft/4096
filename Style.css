@@ -1,13 +1,19 @@
-div.grid
+div#game-container
 {
 	height: 500px;
 	width: 500px;
 	background-color: black;
-	/*border: 2px solid red;*/
 	border-radius: 5px;
-	margin-left: 350px;
+	margin-left: 250px;
 }
 
+div.grid
+{
+	/*position: absolute;*/
+	/*border: 2px solid red;*/
+	
+}
+/*
 div.grid-row
 {
 	border-radius: 5px;
@@ -15,10 +21,10 @@ div.grid-row
 	clear: both;
 	background-color: black;
 	/*border: solid 2px red;*/
-	height: 106.25px;
+/*	height: 106.25px;*/
 	/*margin-bottom: 7px;*/
-	margin-top: 15px;
-}
+/*	margin-top: 15px;*/
+/*}*/
 
 div.grid-cell
 {
@@ -29,6 +35,7 @@ div.grid-cell
 	height: 106.25px;
 	margin-right: 7px;
 	margin-left: 11px;
+	margin-top: 15px;
 	float: left;
 }
 
@@ -36,7 +43,7 @@ div.tile-container
 {
 	position: absolute;
 	top: 23px;
-	left: 369px;
+	left: 269px;
 	z-index: 2;
 }
 
