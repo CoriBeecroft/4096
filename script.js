@@ -23,15 +23,6 @@ $(document).ready(function(){
 			moveTiles("left");		//need to input direction, duh
 			addNewTile();
 		}
-
-		
-	/*	for(var i=0; i<tiles.length; i++)
-		{
-			for(j=0; j<tiles[i].length; j++)
-			{
-				
-			}
-		}*/
 	})
 });
 
@@ -89,7 +80,6 @@ var isValidKey = function(keyCode)
 	{
 		if(keyCode == validKeys[i])
 		{
-			console.log("test")
 			return true;
 		}
 	}
@@ -100,53 +90,14 @@ var addNewTile = function()					//don't add if the grid is full
 {
 	if(!grid.isFull())
 	{
-		var tile = new Tile(findEmptyCellCoordinates());
-		tiles[tile.x][tile.y] = tile;	
+	//	var tile = new Tile(findEmptyCellCoordinates());
+//		tiles[tile.x][tile.y] = tile;	
 	}
 }
-
-/*var isGridFull = function()
-{
-	for(var i=0; i<tiles.length; i++)
-	{
-		for(var j=0; j<tiles[i].length; j++)
-		{
-			if(!tiles[i][j])
-			{
-				return false;
-			}
-		}
-	}
-
-	return true;
-}*/
 
 //These aren't fully being used right now. 
 var gridHeight = 4;
 var gridWidth = 4;
 
 //need to make sure there actually are empty cells before running this. Maybe do a check in here.. Yeah, that would probably be a good idea.  
-var findEmptyCellCoordinates = function()						//This probably needs to be tested a little more
-{
-	var emptyXCells = [];
-
-	while(emptyXCells.length == 0)
-	{
-		var x = parseInt(Math.random()*4);			//Find a column with empty cells
-		var y;
-	
-		for(var i=0; i<tiles[x].length; i++)
-		{
-			if(!tiles[x][i])
-			{
-				emptyXCells.push(i);
-			}
-		}
-	}
-	
-
-	y = emptyXCells[parseInt(Math.random()*emptyXCells.length)];	//Choose a random empty cell from the chosen column
-	console.log({ x: x, y: y});
-	return { x: x, y: y};
-}
 
