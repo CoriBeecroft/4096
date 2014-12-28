@@ -7,13 +7,15 @@
 var grid;
 $(document).ready(function(){
 	$('body').prepend("<div id='game-container'></div>")
+ 	
  	grid = new Grid(4, 4);
-	grid.render();
-	//$('div#game-container').append("<div class='tile-container'></div>");
 
 	//Add tiles
-	addNewTile();
-	addNewTile();
+	grid.addNewTile();
+	grid.addNewTile();
+
+	//render grid
+	grid.render();
 
 	//add keyboard events
 	$('body').keydown(function(e){				// this shouldn't be on body, make sure to fix this. 
@@ -85,19 +87,3 @@ var isValidKey = function(keyCode)
 	}
 	return false;
 }
-
-var addNewTile = function()					//don't add if the grid is full
-{
-	if(!grid.isFull())
-	{
-	//	var tile = new Tile(findEmptyCellCoordinates());
-//		tiles[tile.x][tile.y] = tile;	
-	}
-}
-
-//These aren't fully being used right now. 
-var gridHeight = 4;
-var gridWidth = 4;
-
-//need to make sure there actually are empty cells before running this. Maybe do a check in here.. Yeah, that would probably be a good idea.  
-

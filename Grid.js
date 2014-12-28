@@ -22,29 +22,43 @@ Grid.prototype.buildGrid = function()
 	}	
 }
 
-/*var findEmptyCellCoordinates = function()						//This probably needs to be tested a little more
+Grid.prototype.addNewTile = function()					//maybe return -1 if no tile is added.  
 {
-	var emptyXCells = [];
-
-	while(emptyXCells.length == 0)
+	var cell = this.findEmptyCell();
+	if(cell)
 	{
-		var x = parseInt(Math.random()*4);			//Find a column with empty cells
-		var y;
-	
-		for(var i=0; i<tiles[x].length; i++)
+		cell.tile = new Tile(cell.xPosition, cell.yPosition);		
+	}
+}
+
+Grid.prototype.findEmptyCell = function()						//This probably needs to be tested a little more. Check is grid is empty. 
+{
+	var emptyCells = [];
+
+	for(var i=0; i<this.xDimension; i++)
+	{
+		for(var j=0; j<this.yDimension; j++)
 		{
-			if(!tiles[x][i])
+			var cell = this.getCell(i, j);
+
+			if(!cell.tile)//.isEmtpy())
 			{
-				emptyXCells.push(i);
+				emptyCells.push(cell);
 			}
 		}
 	}
-	
 
-	y = emptyXCells[parseInt(Math.random()*emptyXCells.length)];	//Choose a random empty cell from the chosen column
-	console.log({ x: x, y: y});
-	return { x: x, y: y};
-}*/
+	if(emptyCells.length > 0)
+	{
+		var randomIndex = parseInt(Math.random()*emptyCells.length);
+		return emptyCells[randomIndex];	
+	}
+	else
+	{
+		return null;
+	}
+	
+}
 
 Grid.prototype.isFull = function()
 {
@@ -77,7 +91,7 @@ Grid.prototype.render = function()
 	{
 		for(var j=0; j<this.yDimension; j++)
 		{			
-			grid.append(this.getCell(i, j).$html);
+			grid.append(this.getCell(i, j).getHTML());
 		}
 	}
 }

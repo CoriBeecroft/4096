@@ -7,7 +7,23 @@ var Cell = function(xPosition, yPosition, tile)
 	this.left;
 	this.up;
 	this.down;
-	this.$html = $("<div class='grid-cell' data-xPos = ' " + xPosition +  "' data-yPos = '" + yPosition + "'></div>");
+}
+
+Cell.prototype.getHTML = function()
+{
+	var $html = $("<div class='grid-cell' data-xPos = ' " + this.xPosition +  "' data-yPos = '" + this.	yPosition + "'></div>");
+
+	if(this.tile)
+	{
+		$($html).append(this.tile.element);
+	}
+
+	return $html;
+}
+
+Cell.prototype.isEmpty = function()			//This function might be entirely unnecessary. 
+{
+	return this.tile ? true : false;
 }
 
 Cell.prototype.link = function(cell, direction)
