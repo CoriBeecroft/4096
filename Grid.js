@@ -1,17 +1,15 @@
-var Grid = function(xDimension, yDimension)
+var Grid = function(width, height)
 {
-	this.origin;// = new Cell(0, 0);
-	this.xDimension = xDimension;
-	this.yDimension = yDimension;
+	this.origin;
+	this.width = width;
+	this.height = height;
 	this.buildGrid();
-	//this.goThroughTheCells();
 }
 
-Grid.prototype.goThroughTheCells = function(doBlah, params, cell)
+Grid.prototype.goThroughTheCells = function(doBlah, params, cell)				//probably won't actually need this. 
 {	
 	cell = cell || this.origin;
 
-//console.log("oddling");
 	doBlah(cell, params);
 	if(cell.right)
 	{
@@ -24,12 +22,11 @@ Grid.prototype.goThroughTheCells = function(doBlah, params, cell)
 	}
 }
 
-Grid.prototype.moveTiles = function(direction)						//Need to compute all the new tile directions before actually moving the tiles. 
+Grid.prototype.moveTiles = function(direction)
 {
-	console.log(direction);
 	if(direction === "left")
 	{
-		for(var i=0; i<this.yDimension; i++)
+		for(var i=0; i<this.height; i++)
 		{
 			var current = this.getColumn(i);
 			do
@@ -42,7 +39,7 @@ Grid.prototype.moveTiles = function(direction)						//Need to compute all the ne
 
 	if(direction === "right")
 	{
-		for(var i=this.xDimension-1; i>=0; i--)
+		for(var i=this.width-1; i>=0; i--)
 		{
 			var current = this.getColumn(i);
 			do
@@ -55,7 +52,7 @@ Grid.prototype.moveTiles = function(direction)						//Need to compute all the ne
 	
 	if(direction === "up")
 	{
-		for(var i=0; i<this.yDimension; i++)
+		for(var i=0; i<this.height; i++)
 		{
 			var current = this.getRow(i);
 			do
@@ -68,7 +65,7 @@ Grid.prototype.moveTiles = function(direction)						//Need to compute all the ne
 
 	if(direction === "down")
 	{
-		for(var i=this.yDimension-1; i>=0; i--)
+		for(var i=this.height-1; i>=0; i--)
 		{
 			var current = this.getRow(i);
 			do
@@ -82,7 +79,6 @@ Grid.prototype.moveTiles = function(direction)						//Need to compute all the ne
 
 Grid.prototype.moveTile = function(cell, direction)
 {
-	//console.log("movetile");
 	if(cell.tile)
 	{
 		if(this.tileCanMoveOrMerge(cell, direction))
@@ -90,16 +86,13 @@ Grid.prototype.moveTile = function(cell, direction)
 			this.computeTileEndPosition(cell, direction, this.tileCanMoveOrMerge(cell, direction));
 		}
 	}
-
 }
 
-Grid.prototype.computeTileEndPosition = function(cell, direction, moveType)				//Cori
+Grid.prototype.computeTileEndPosition = function(cell, direction, moveType)
 {
-	//tile can move? 
-		//Tile can move in 
 	if(moveType === "merge")
 	{
-
+		//MERGE TEH TILES!
 	}
 	else if(moveType === "move")
 	{
@@ -140,8 +133,7 @@ Grid.prototype.computeTileEndPosition = function(cell, direction, moveType)				/
 			}
 		} while(current && this.tileCanMoveOrMerge(current, direction))
 	}
-/*	console.log("current tile: ");
-console.log(current.tile);*/
+
 	return cell;
 }
 
@@ -155,13 +147,11 @@ Grid.prototype.tileCanMoveOrMerge = function(cell, direction)
 
 	if(cell && cell.tile)
 	{
-
-	//	console.log(cell);
 		//check for empty adjacent spaces or equivalent adjacent tiles
 		switch (direction)
 		{
 			case "left":
-				if(cell && cell.left && !cell.left.tile)	
+				if(cell && cell.left && !cell.left.tile)			//These are a mess... clean 'em up if possible. 
 					canMove = !cell.left.tile ? "move" : (cell.left.tile.value == tile.value ? "merge" : false);
 				break;
 			case "right":
@@ -176,27 +166,23 @@ Grid.prototype.tileCanMoveOrMerge = function(cell, direction)
 				if(cell && cell.down && !cell.down.tile)
 					canMove = !cell.down.tile ? "move" : (cell.down.tile.value == tile.value ? "merge" : false);
 				break;
-			default:
-				console.log("oddlingzzzzz");							//Do something about this
 		}
 	}
 
 	return canMove;
 }
 
-Grid.prototype.buildGrid = function()
+Grid.prototype.buildGrid = function()			//Uhh... refactor this, it's terrible. 
 {
 	var tempGrid = [[],[],[],[]]; 			//Make this dynamic 
 	
-	for(var i=0; i<this.xDimension; i++)
+	for(var i=0; i<this.width; i++)
 	{
-		for(var j=0; j<this.yDimension; j++)
+		for(var j=0; j<this.height; j++)
 		{
 			tempGrid[i][j] = new Cell(i, j);
 		}
 	}
-
-	this.origin = tempGrid[0][0];
 
 	for(var i=0; i<tempGrid.length; i++)
 	{
@@ -211,7 +197,7 @@ Grid.prototype.buildGrid = function()
 			{
 				hasLeft = false;
 			}
-			if(i === this.xDimension-1)
+			if(i === this.width-1)
 			{
 				hasRight = false;
 			}
@@ -220,7 +206,7 @@ Grid.prototype.buildGrid = function()
 			{
 				hasUp = false;
 			}
-			if(j === this.yDimension-1)
+			if(j === this.height-1)
 			{
 				hasDown = false;
 			}
@@ -244,9 +230,10 @@ Grid.prototype.buildGrid = function()
 			{
 				tempGrid[i][j].link(tempGrid[i][j+1], "down");
 			}
-			
 		}
 	}
+
+	this.origin = tempGrid[0][0];
 }
 
 Grid.prototype.addNewTile = function()					//maybe return -1 if no tile is added.  
@@ -263,13 +250,13 @@ Grid.prototype.findEmptyCell = function()						//This probably needs to be teste
 {
 	var emptyCells = [];
 
-	for(var i=0; i<this.xDimension; i++)
+	for(var i=0; i<this.width; i++)
 	{
-		for(var j=0; j<this.yDimension; j++)
+		for(var j=0; j<this.height; j++)
 		{
 			var cell = this.getCell(i, j);
 
-			if(!cell.tile)//.isEmtpy())
+			if(cell.isEmpty())
 			{
 				emptyCells.push(cell);
 			}
@@ -283,9 +270,8 @@ Grid.prototype.findEmptyCell = function()						//This probably needs to be teste
 	}
 	else
 	{
-		return null;
+		return null;				//THis is probably not necessary... but maybe makes it easier to read?
 	}
-	
 }
 
 Grid.prototype.getCell = function(xPosition, yPosition)
@@ -313,8 +299,7 @@ Grid.prototype.getRow = function(index)
 	{
 		rowHead = rowHead.down;
 	}
-	console.log(index);
-console.log(rowHead);
+
 	return rowHead;
 }
 
@@ -326,8 +311,7 @@ Grid.prototype.getColumn = function(index)
 	{
 		columnHead = columnHead.right;
 	}
-	console.log("columnHead");
-console.log(columnHead);
+
 	return columnHead;
 }
 
@@ -337,9 +321,9 @@ Grid.prototype.render = function()
 	grid.empty();
 	$('div#game-container').append(grid);
 	
-	for(var j=0; j<this.xDimension; j++)
+	for(var j=0; j<this.width; j++)
 	{
-		for(var i=0; i<this.yDimension; i++)
+		for(var i=0; i<this.height; i++)
 		{			
 			grid.append(this.getCell(i, j).getHTML());
 		}

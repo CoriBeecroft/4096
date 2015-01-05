@@ -1,4 +1,10 @@
 var grid;
+
+var LEFT = 37;
+var RIGHT = 39;
+var UP = 38;
+var DOWN = 40;
+
 $(document).ready(function(){
 	$('body').prepend("<div id='game-container'></div>")
  	
@@ -12,27 +18,29 @@ $(document).ready(function(){
 	grid.render();
 
 	//add keyboard events
-	$('body').keydown(function(e){				// this shouldn't be on body, make sure to fix this. 
+	$('body').keydown(function(e) 				// this shouldn't be on body, make sure to fix this. 
+	{
 		var key = e.keyCode;
 		if(isValidKey(key))
 		{
 			var direction;
 			switch(key)
 			{
-				case 37: 
+				case LEFT: 
 					direction = "left";
 					break;
-				case 39: 
+				case RIGHT: 
 					direction = "right";
 					break;
-				case 38:
+				case UP:
 					direction = "up";
 					break;
-				case 40:
+				case DOWN:
 					direction = "down";
 					break;
-			}			
-			grid.moveTiles(direction);		//need to input direction, duh
+			}
+
+			grid.moveTiles(direction);
 			grid.addNewTile();
 			grid.render();
 		}
@@ -41,7 +49,7 @@ $(document).ready(function(){
 
 var isValidKey = function(keyCode)
 {
-	var validKeys = [37, 38, 39, 40];
+	var validKeys = [LEFT, RIGHT, UP, DOWN];
 	for(var i=0; i<validKeys.length; i++)
 	{
 		if(keyCode == validKeys[i])

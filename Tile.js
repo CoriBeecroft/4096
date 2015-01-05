@@ -5,11 +5,14 @@ var Tile = function(x, y, value)
 	this.x = x;
 	this.y = y;
 	this.mergeQueued = false;
+
 	//generate value
 	this.value = value || (parseInt(Math.random()*10) % 5 == 0) ? (4) : (2);
+}
 
-	//generate tile
-	this.element = $("<div class='tile' x='" + this.x + "' y='" + this.y + "'>" + this.value + "</div>");				//Element is a dumb name. Maybe get rid of the value class. The value should probably be in an attribute or something, but
+Tile.prototype.getHTML = function()
+{
+	return $("<div class='tile' x='" + this.x + "' y='" + this.y + "'>" + this.value + "</div>");
 }
 
 Tile.prototype.move = function(x, y)

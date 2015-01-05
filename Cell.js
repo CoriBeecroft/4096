@@ -15,7 +15,7 @@ Cell.prototype.getHTML = function()
 
 	if(this.tile)
 	{
-		$($html).append(this.tile.element);
+		$($html).append(this.tile.getHTML());
 	}
 
 	return $html;
@@ -23,7 +23,7 @@ Cell.prototype.getHTML = function()
 
 Cell.prototype.isEmpty = function()			//This function might be entirely unnecessary. 
 {
-	return this.tile ? true : false;
+	return this.tile ? false : true;
 }
 
 Cell.prototype.link = function(cell, direction)
