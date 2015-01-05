@@ -90,14 +90,9 @@ Grid.prototype.moveTile = function(cell, direction)
 
 Grid.prototype.computeTileEndPosition = function(cell, direction, moveType)
 {
-	if(moveType === "merge")
+	var current = cell;
+	if(moveType === "move")
 	{
-		//MERGE TEH TILES!
-	}
-	else if(moveType === "move")
-	{
-		var current = cell;
-
 		do
 		{
 			switch (direction)
@@ -110,11 +105,15 @@ Grid.prototype.computeTileEndPosition = function(cell, direction, moveType)
 					current.tile = tile;
 					break;
 				case "right":
-					var tile = current.tile;
-					current.tile = null;
-					current = current.right;
-					tile.move(current.xPosition, current.yPosition);
-					current.tile = tile;
+					console.log(current);
+					if(current.right)
+					{	
+						var tile = current.tile;
+						current.tile = null;
+						current = current.right;
+						tile.move(current.xPosition, current.yPosition);
+						current.tile = tile;
+					}
 					break;
 				case "up":
 					var tile = current.tile;
@@ -131,7 +130,35 @@ Grid.prototype.computeTileEndPosition = function(cell, direction, moveType)
 					current.tile = tile;
 					break;
 			}
-		} while(current && this.tileCanMoveOrMerge(current, direction))
+		} while(current && this.tileCanMoveOrMerge(current, direction) === "move")
+	}
+	
+	if(this.tileCanMoveOrMerge(current, direction) === "merge")
+	{
+		console.log("merging?");
+		console.log(current);
+		console.log(direction);
+		console.log(this.tileCanMoveOrMerge(current, direction));
+
+		switch(direction)
+		{
+			case "left":
+				current.left.tile.value *= 2;
+				current.tile = null;
+				break;
+			case "right":
+				current.right.tile.value *= 2;
+				current.tile = null;
+				break;
+			case "up":
+				current.up.tile.value *= 2;
+				current.tile = null;
+				break;
+			case "down":
+				current.down.tile.value *= 2;
+				current.tile = null;
+				break;
+		}
 	}
 
 	return cell;
@@ -142,31 +169,52 @@ Grid.prototype.tileCanMoveOrMerge = function(cell, direction)
 	direction = direction + "";
 	direction = direction.toLowerCase(); 
 
-	var tile = cell.tile;
+	
 	var canMove;
 
 	if(cell && cell.tile)
 	{
+		var tile = cell.tile;
 		//check for empty adjacent spaces or equivalent adjacent tiles
 		switch (direction)
 		{
 			case "left":
-				if(cell && cell.left && !cell.left.tile)			//These are a mess... clean 'em up if possible. 
-					canMove = !cell.left.tile ? "move" : (cell.left.tile.value == tile.value ? "merge" : false);
+				if(cell && cell.left)			//These are a mess... clean 'em up if possible. 
+					canMove = !cell.left.tile ? "move" : (cell.left.tile.value === tile.value ? "merge" : false);
 				break;
 			case "right":
-				if(cell && cell.right && !cell.right.tile)
-					canMove = !cell.right.tile ? "move" : (cell.right.tile.value == tile.value ? "merge" : false);
+			//	console.log("right");
+				if(cell && cell.right)
+				{
+					if(!cell.right.tile)
+						canMove = "move";
+					else if(cell.right.tile.value === tile.value)
+					{
+						canMove = "merge";
+					}
+					else
+					{
+						canMove = "oddling";
+					}
+				//	console.log(cell.right);
+				//	canMove = !cell.right.tile ? "move" : (cell.right.tile.value === tile.value ? "merge" : false);
+				}
+				else
+				{
+					canMove = "fathead";
+				}
+			//	console.log("canmove: " + canMove);
 				break;
 			case "up":
-				if(cell && cell.up && !cell.up.tile)
-					canMove = !cell.up.tile ? "move" : (cell.up.tile.value == tile.value ? "merge" : false);
+				if(cell && cell.up)
+					canMove = !cell.up.tile ? "move" : (cell.up.tile.value === tile.value ? "merge" : false);
 				break;
 			case "down":
-				if(cell && cell.down && !cell.down.tile)
-					canMove = !cell.down.tile ? "move" : (cell.down.tile.value == tile.value ? "merge" : false);
+				if(cell && cell.down)
+					canMove = !cell.down.tile ? "move" : (cell.down.tile.value === tile.value ? "merge" : false);
 				break;
 		}
+
 	}
 
 	return canMove;
