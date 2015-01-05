@@ -75,6 +75,20 @@ Grid.prototype.moveTiles = function(direction)
 			} while(current);
 		}
 	}
+
+	this.resetMergedTiles();
+}
+
+Grid.prototype.resetMergedTiles = function()
+{
+	this.goThroughTheCells(function(cell)
+	{
+		console.log(cell);
+		if(cell && cell.tile)
+		{
+			cell.tile.hasMerged = false;
+		}
+	});
 }
 
 Grid.prototype.moveTile = function(cell, direction)
@@ -133,7 +147,7 @@ Grid.prototype.computeTileEndPosition = function(cell, direction, moveType)
 		} while(current && this.tileCanMoveOrMerge(current, direction) === "move")
 	}
 	
-	if(this.tileCanMoveOrMerge(current, direction) === "merge")
+	if(this.tileCanMoveOrMerge(current, direction) === "merge" && !current.tile.hasMerged)
 	{
 		console.log("merging?");
 		console.log(current);
@@ -143,25 +157,39 @@ Grid.prototype.computeTileEndPosition = function(cell, direction, moveType)
 		switch(direction)
 		{
 			case "left":
-				current.left.tile.value *= 2;
-				current.tile = null;
+				if(!current.left.tile.hasMerged)
+				{
+					current.left.tile.value *= 2;
+					current.left.tile.hasMerged = true;
+					current.tile = null;
+				}
 				break;
 			case "right":
-				current.right.tile.value *= 2;
-				current.tile = null;
+				if(!current.right.tile.hasMerged)
+				{
+					current.right.tile.value *= 2;
+					current.right.tile.hasMerged = true;
+					current.tile = null;
+				}
 				break;
 			case "up":
-				current.up.tile.value *= 2;
-				current.tile = null;
+				if(!current.up.tile.hasMerged)
+				{
+					current.up.tile.value *= 2;
+					current.up.tile.hasMerged = true;
+					current.tile = null;
+				}
 				break;
 			case "down":
-				current.down.tile.value *= 2;
-				current.tile = null;
+				if(!current.down.tile.hasMerged)
+				{
+					current.down.tile.value *= 2;
+					current.down.tile.hasMerged = true;
+					current.tile = null;
+				}
 				break;
 		}
 	}
-
-	return cell;
 }
 
 Grid.prototype.tileCanMoveOrMerge = function(cell, direction)

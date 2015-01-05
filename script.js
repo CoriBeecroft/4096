@@ -13,6 +13,23 @@ $(document).ready(function(){
 	//Add tiles
 	grid.addNewTile();
 	grid.addNewTile();
+	grid.addNewTile();
+	grid.addNewTile();
+	grid.addNewTile();
+	grid.addNewTile();
+	grid.addNewTile();
+	grid.addNewTile();
+	grid.addNewTile();
+	grid.addNewTile();
+	grid.addNewTile();
+	grid.addNewTile();
+	grid.addNewTile();
+	grid.addNewTile();
+	grid.addNewTile();
+	grid.addNewTile();
+
+
+
 
 	//render grid
 	grid.render();
