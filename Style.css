@@ -1,7 +1,7 @@
-div#game-container
+div#game-container				/*This stuff should probably be on the grid rather than the game container*/
 {
-	height: 500px;
-	width: 500px;
+	height: 272px; /*500px;*/					
+	width: 270px;/*500px;*/
 	background-color: black;
 	border-radius: 5px;
 	margin-left: 250px;
@@ -11,8 +11,8 @@ div.grid-cell
 {
 	border-radius: 5px;
 	background-color: grey;
-	width: 106.25px;
-	height: 106.25px;
+	width: 50px;/*106.25px;*/
+	height: 50px;/*106.25px;*/
 	margin-left: 15px;
 	margin-top: 15px;
 	float: left;
@@ -21,11 +21,11 @@ div.grid-cell
 div.tile
 {
 	position: absolute;
-	font-size: 100px;
+	font-size: 50px; /*100px;*/
 	font-weight: bold;
 	text-align: center;
 	border-radius: 5px;
-	width: 106.25px;
-	height: 106.25px;
+	width: 50px;/*106.25px;*/
+	height: 50px;/*106.25px;*/
 	background-color: #00bb00;
 }

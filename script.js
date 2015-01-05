@@ -13,58 +13,31 @@ $(document).ready(function(){
 
 	//add keyboard events
 	$('body').keydown(function(e){				// this shouldn't be on body, make sure to fix this. 
-
-		if(isValidKey(e.keyCode))
+		var key = e.keyCode;
+		if(isValidKey(key))
 		{
-		//	moveTiles("left");		//need to input direction, duh
+			var direction;
+			switch(key)
+			{
+				case 37: 
+					direction = "left";
+					break;
+				case 39: 
+					direction = "right";
+					break;
+				case 38:
+					direction = "up";
+					break;
+				case 40:
+					direction = "down";
+					break;
+			}			
+			grid.moveTiles(direction);		//need to input direction, duh
 			grid.addNewTile();
 			grid.render();
 		}
 	})
 });
-
-var moveTiles = function(direction)
-{
-	for(var i=0; i<tiles.length; i++)
-	{
-		for(var j=0; j<tiles[i].length; j++)
-		{
-			moveTile(tiles[i][j], direction);
-		}
-	}
-}
-
-var moveTile = function(tile, direction)
-{
-	//check if tile can move
-	if(tileCanMove(direction))
-	{
-		//compute tile end position
-		//move tile
-	}
-}
-
-var tileCanMove = function(tile, direction)
-{
-	direction = direction + "";
-	direction = direction.toLowerCase();
-	var tileToCheck; 
-
-	//check for empty adjacent spaces or equivalent adjacent tiles
-	switch (direction)
-	{
-		case "left":
-		//	tileToCheck = 
-		case "right":
-			console.log("oddling");
-		case "up":
-			console.log("oddling");
-		case "down":
-			console.log("oddling");
-		default:
-			console.log("oddling");				 
-	}
-}
 
 var isValidKey = function(keyCode)
 {

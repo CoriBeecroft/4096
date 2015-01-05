@@ -33,14 +33,18 @@ Cell.prototype.link = function(cell, direction)
 		case "right": 
 			this.right = cell;
 			cell.left = this;
+			break;
 		case "left": 
 			this.left = cell;
 			cell.right = this;
+			break;
 		case "up": 
 			this.up = cell;
 			cell.down = this;
+			break;
 		case "down": 
 			this.down = cell;
 			cell.up = this;
+			break;
 	}
 }
