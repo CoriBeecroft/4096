@@ -20,12 +20,19 @@ div.grid-cell
 
 div.tile
 {
+	/*padding: 10%;*/
 	position: absolute;
-	font-size: 100px;
-	font-weight: bold;
-	text-align: center;
 	border-radius: 5px;
 	width: 106.25px;
 	height: 106.25px;
 	background-color: #bb0000;
+}
+
+div.value
+{
+	margin: 10px;
+	font-size: 100px;
+	font-weight: bold;
+	text-align: center;
+	font-family: Arial;
 }

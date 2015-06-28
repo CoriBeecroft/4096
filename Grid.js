@@ -4,9 +4,10 @@ var Grid = function(width, height)
 	this.width = width;
 	this.height = height;
 	this.buildGrid();
+	this.tilesCanMove = true;
 }
 
-Grid.prototype.goThroughTheCells = function(doBlah, params, cell)				//probably won't actually need this. 
+Grid.prototype.goThroughTheCells = function(doBlah, params, cell)
 {	
 	cell = cell || this.origin;
 
@@ -24,6 +25,8 @@ Grid.prototype.goThroughTheCells = function(doBlah, params, cell)				//probably 
 
 Grid.prototype.moveTiles = function(direction)
 {
+	var tileHasMoved = false;
+
 	if(direction === "left")
 	{
 		for(var i=0; i<this.height; i++)
@@ -31,7 +34,7 @@ Grid.prototype.moveTiles = function(direction)
 			var current = this.getColumn(i);
 			do
 			{
-				this.moveTile(current, direction);
+				tileHasMoved = this.moveTile(current, direction, tileHasMoved);
 				current = current.down;
 			} while(current);
 		}
@@ -44,7 +47,7 @@ Grid.prototype.moveTiles = function(direction)
 			var current = this.getColumn(i);
 			do
 			{
-				this.moveTile(current, direction);
+				tileHasMoved = this.moveTile(current, direction, tileHasMoved);
 				current = current.down;
 			} while(current);
 		}
@@ -57,7 +60,7 @@ Grid.prototype.moveTiles = function(direction)
 			var current = this.getRow(i);
 			do
 			{
-				this.moveTile(current, direction);
+				tileHasMoved = this.moveTile(current, direction, tileHasMoved);
 				current = current.right;
 			} while(current);
 		}
@@ -70,20 +73,21 @@ Grid.prototype.moveTiles = function(direction)
 			var current = this.getRow(i);
 			do
 			{
-				this.moveTile(current, direction);
+				tileHasMoved = this.moveTile(current, direction, tileHasMoved);
 				current = current.right;
 			} while(current);
 		}
 	}
 
 	this.resetMergedTiles();
+
+	return tileHasMoved;
 }
 
 Grid.prototype.resetMergedTiles = function()
 {
 	this.goThroughTheCells(function(cell)
 	{
-		console.log(cell);
 		if(cell && cell.tile)
 		{
 			cell.tile.hasMerged = false;
@@ -91,18 +95,20 @@ Grid.prototype.resetMergedTiles = function()
 	});
 }
 
-Grid.prototype.moveTile = function(cell, direction)
+Grid.prototype.moveTile = function(cell, direction, tileHasMoved)
 {
 	if(cell.tile)
 	{
 		if(this.tileCanMoveOrMerge(cell, direction))
 		{
-			this.computeTileEndPosition(cell, direction, this.tileCanMoveOrMerge(cell, direction));
+			tileHasMoved = this.computeTileEndPosition(cell, direction, this.tileCanMoveOrMerge(cell, direction), tileHasMoved);
 		}
 	}
+
+	return tileHasMoved;
 }
 
-Grid.prototype.computeTileEndPosition = function(cell, direction, moveType)
+Grid.prototype.computeTileEndPosition = function(cell, direction, moveType, tileHasMoved)
 {
 	var current = cell;
 	if(moveType === "move")
@@ -119,7 +125,7 @@ Grid.prototype.computeTileEndPosition = function(cell, direction, moveType)
 					current.tile = tile;
 					break;
 				case "right":
-					console.log(current);
+					//console.log(current);
 					if(current.right)
 					{	
 						var tile = current.tile;
@@ -144,15 +150,13 @@ Grid.prototype.computeTileEndPosition = function(cell, direction, moveType)
 					current.tile = tile;
 					break;
 			}
+			tileHasMoved = true;
 		} while(current && this.tileCanMoveOrMerge(current, direction) === "move")
 	}
 	
 	if(this.tileCanMoveOrMerge(current, direction) === "merge" && !current.tile.hasMerged)
 	{
-		console.log("merging?");
-		console.log(current);
-		console.log(direction);
-		console.log(this.tileCanMoveOrMerge(current, direction));
+		tileHasMoved = true;
 
 		switch(direction)
 		{
@@ -190,6 +194,8 @@ Grid.prototype.computeTileEndPosition = function(cell, direction, moveType)
 				break;
 		}
 	}
+
+	return tileHasMoved;
 }
 
 Grid.prototype.tileCanMoveOrMerge = function(cell, direction)
@@ -197,8 +203,7 @@ Grid.prototype.tileCanMoveOrMerge = function(cell, direction)
 	direction = direction + "";
 	direction = direction.toLowerCase(); 
 
-	
-	var canMove;
+	var canMove = false;
 
 	if(cell && cell.tile)
 	{
@@ -207,31 +212,14 @@ Grid.prototype.tileCanMoveOrMerge = function(cell, direction)
 		switch (direction)
 		{
 			case "left":
-				if(cell && cell.left)			//These are a mess... clean 'em up if possible. 
+				if(cell && cell.left)
 					canMove = !cell.left.tile ? "move" : (cell.left.tile.value === tile.value ? "merge" : false);
 				break;
 			case "right":
-			//	console.log("right");
 				if(cell && cell.right)
 				{
-					if(!cell.right.tile)
-						canMove = "move";
-					else if(cell.right.tile.value === tile.value)
-					{
-						canMove = "merge";
-					}
-					else
-					{
-						canMove = "oddling";
-					}
-				//	console.log(cell.right);
-				//	canMove = !cell.right.tile ? "move" : (cell.right.tile.value === tile.value ? "merge" : false);
+					canMove = !cell.right.tile ? "move" : (cell.right.tile.value === tile.value ? "merge" : false);
 				}
-				else
-				{
-					canMove = "fathead";
-				}
-			//	console.log("canmove: " + canMove);
 				break;
 			case "up":
 				if(cell && cell.up)
@@ -244,7 +232,7 @@ Grid.prototype.tileCanMoveOrMerge = function(cell, direction)
 		}
 
 	}
-
+//console.log("canMove: " + canMove);
 	return canMove;
 }
 
@@ -393,6 +381,7 @@ Grid.prototype.getColumn = function(index)
 
 Grid.prototype.render = function()
 {
+	//console.log("The grid is being rendered! " + this.tilesCanMove);
 	var grid = $('div.grid').length > 0 ? $('div.grid') : $("<div class='grid'></div>");			//There might be a better way to do this bit. 
 	grid.empty();
 	$('div#game-container').append(grid);
@@ -404,4 +393,37 @@ Grid.prototype.render = function()
 			grid.append(this.getCell(i, j).getHTML());
 		}
 	}
+}
+
+Grid.prototype.canTilesMove = function()
+{
+	this.tilesCanMove = false; 
+//	console.log("canTilesMove: " + this.tilesCanMove);
+	this.goThroughTheCells($.proxy(function(cell)
+	{
+		if(this.tileCanMoveOrMerge(cell, "left"))
+		{
+			this.tilesCanMove = true;
+			return;
+		}
+		else if(this.tileCanMoveOrMerge(cell, "right"))
+		{
+			this.tilesCanMove = true;
+			return;
+		}
+		else if(this.tileCanMoveOrMerge(cell, "up"))
+		{
+			this.tilesCanMove = true;
+			return;
+		}
+		else if(this.tileCanMoveOrMerge(cell, "down"))
+		{
+			this.tilesCanMove = true;
+			return;
+		}
+
+	}, this));
+	//console.log("tilesCanMove: " + this.tilesCanMove);
+	return this.tilesCanMove;
+
 }
