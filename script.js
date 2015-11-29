@@ -4,73 +4,53 @@ var LEFT = 37;
 var RIGHT = 39;
 var UP = 38;
 var DOWN = 40;
+var A = 65;
 
 $(document).ready(function(){
 	$('body').prepend("<div id='game-container'></div>")
- 	
+
  	for(var i= 0; i<1; i++)
  	{
-		runGame(true);	
- 	}
- 	
+ 		grid = new Grid(4, 4);
 
-});
+		//Add tiles
+		grid.addNewTile();
+		grid.addNewTile();
 
-//Maybe do some checking on automated variable
-var runGame = function(automated)
-{
-	grid = new Grid(4, 4);
+		//Render grid
+		grid.render();
 
-	//Add tiles
-	grid.addNewTile();
-	grid.addNewTile();
-
-	//render grid
-	grid.render();
-
-	if(!automated)
-	{
-		//add keyboard events
-		$('body').keydown(function(e) 				// this shouldn't be on body, make sure to fix this. 
+ 		var game = new Game();
+		$('body').keydown(function(e) 	// this shouldn't be on body, make sure to fix this. 
 		{
+console.log("other keydown");
 			var key = e.keyCode;
-			if(isValidKey(key))
+			if(isValidKey(key))	
 			{
 				var direction;
 				switch(key)
 				{
-					case LEFT: 
-						direction = "left";
-						break;
-					case RIGHT: 
-						direction = "right";
-						break;
-					case UP:
-						direction = "up";
-						break;
-					case DOWN:
-						direction = "down";
+					case A: 
+						game.setAutomated(!game.automated);
+						game.runGame();
 						break;
 				}
-
-				var tileHasMoved = grid.moveTiles(direction);
-				if(tileHasMoved)
-				{
-					grid.addNewTile();
-				}
-				grid.render();
 			}
 		})
-	}
-	else
+
+	$('body').keydown(function(e) 	// this shouldn't be on body, make sure to fix this. 
 	{
-		var game = new AutomatedGame();
-	}
-}
+		game.makeMove(e.keyCode)
+	});
+
+
+	//game.makeMove();
+ 	}
+});
 
 var isValidKey = function(keyCode)
 {
-	var validKeys = [LEFT, RIGHT, UP, DOWN];
+	var validKeys = [LEFT, RIGHT, UP, DOWN, A];
 	for(var i=0; i<validKeys.length; i++)
 	{
 		if(keyCode == validKeys[i])

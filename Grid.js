@@ -125,7 +125,6 @@ Grid.prototype.computeTileEndPosition = function(cell, direction, moveType, tile
 					current.tile = tile;
 					break;
 				case "right":
-					//console.log(current);
 					if(current.right)
 					{	
 						var tile = current.tile;
@@ -208,6 +207,7 @@ Grid.prototype.tileCanMoveOrMerge = function(cell, direction)
 	if(cell && cell.tile)
 	{
 		var tile = cell.tile;
+		
 		//check for empty adjacent spaces or equivalent adjacent tiles
 		switch (direction)
 		{
@@ -230,9 +230,8 @@ Grid.prototype.tileCanMoveOrMerge = function(cell, direction)
 					canMove = !cell.down.tile ? "move" : (cell.down.tile.value === tile.value ? "merge" : false);
 				break;
 		}
-
 	}
-//console.log("canMove: " + canMove);
+
 	return canMove;
 }
 
@@ -334,7 +333,7 @@ Grid.prototype.findEmptyCell = function()						//This probably needs to be teste
 	}
 	else
 	{
-		return null;				//THis is probably not necessary... but maybe makes it easier to read?
+		return null;				//This is probably not necessary... but maybe makes it easier to read?
 	}
 }
 
@@ -381,7 +380,6 @@ Grid.prototype.getColumn = function(index)
 
 Grid.prototype.render = function()
 {
-	//console.log("The grid is being rendered! " + this.tilesCanMove);
 	var grid = $('div.grid').length > 0 ? $('div.grid') : $("<div class='grid'></div>");			//There might be a better way to do this bit. 
 	grid.empty();
 	$('div#game-container').append(grid);
@@ -398,7 +396,7 @@ Grid.prototype.render = function()
 Grid.prototype.canTilesMove = function()
 {
 	this.tilesCanMove = false; 
-//	console.log("canTilesMove: " + this.tilesCanMove);
+
 	this.goThroughTheCells($.proxy(function(cell)
 	{
 		if(this.tileCanMoveOrMerge(cell, "left"))
@@ -423,7 +421,6 @@ Grid.prototype.canTilesMove = function()
 		}
 
 	}, this));
-	//console.log("tilesCanMove: " + this.tilesCanMove);
-	return this.tilesCanMove;
 
+	return this.tilesCanMove;
 }

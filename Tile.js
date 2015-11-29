@@ -7,13 +7,12 @@ var Tile = function(x, y, value)
 	this.hasMerged = false;
 
 	//generate value
-	this.value = value || (parseInt(Math.random()*10) % 5 == 0) ? (4) : (2);
+	this.value = value || (parseInt(Math.random()*10) % 5000 == 0) ? (4) : (2);
 }
 
 Tile.prototype.getHTML = function()
 {
 	return $("<div class='tile' x='" + this.x + "' y='" + this.y + "' style = 'background-color: " + this.getColor() + "'>" + "<div class=value style = 'font-size: " + this.getFontSize() + "px; margin-top: " + (106.25 - this.getFontSize())/2 + "px'>"  + this.value + "</div></div>");
-	//return $("<div class='tile' x='" + this.x + "' y='" + this.y + "'>" + this.value + "</div>");
 }
 
 Tile.prototype.getFontSize = function()
@@ -22,19 +21,7 @@ Tile.prototype.getFontSize = function()
 	var length = valueString.length;
 	var size;
 
-/*	if(length < 5)
-	{
-		size = parseInt(100 - (length-1)*19);
-	}
-	else if(length >= 5 && length < 7)
-	{
-		size = parseInt(35 - (length-5)*6);
-	}
-	else if(length >= 7 && length <9)
-	{
-		size = parseInt(25 - (length-7)*3);
-	}					*/											//Might need more cases(including potentially a truncate), but this is good for now
-
+	//Might need more cases(including potentially a truncate), but this is good for now
 	if(length < 5)
 	{
 		size = parseInt(100 - (length-1)*25);
@@ -48,7 +35,6 @@ Tile.prototype.getFontSize = function()
 		size = parseInt(25 - (length-7)*3);
 	}					
 
-
 	return size;
 }
 
@@ -59,9 +45,18 @@ Tile.prototype.getColor = function()
 	var blue = this.calculateColorComponent(102, 200, 3, 12);
 
 	return "#" + red + green + blue;*/
+	var hue;
+//	console.log("(" + this.value + ", " + hue + ")");
+	//if(this.value < 256)
+//	{
+		hue = Math.log2(this.value) * 5;
+//	}
+//	else
+//	{
+//		hue = Math.log2(this.value) * 8;
+//	}
 
-
-	return "hsla(" + this.value + "," + 75 + "%," + 35 + "%," + 1 + ")";
+	return "hsla(" + hue + "," + 75 + "%," + 35 + "%," + 1 + ")";
 }
 
 Tile.prototype.calculateColorComponent = function(initialValue, finalValue, startingPower, endingPower)
