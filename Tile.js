@@ -12,10 +12,10 @@ var Tile = function(x, y, value)
 
 Tile.prototype.getHTML = function()
 {
-	return $("<div class='tile' x='" + this.x + "' y='" + this.y + "' style = 'background-color: " + this.getColor() + "'>" + "<div class=value style = 'font-size: " + this.getFontSize() + "px; margin-top: " + (106.25 - this.getFontSize())/2 + "px'>"  + this.value + "</div></div>");
+	return $("<div class='tile' x='" + this.x + "' y='" + this.y + "' style = 'background-color: " + this.getColor() + "'>" + "<div class=value style = 'font-size: " + this.getFontSize() + /*"px; margin-top: " + (106.25 - this.getFontSize())/2 +*/ "px'>"  + this.value + "</div></div>");
 }
 
-Tile.prototype.getFontSize = function()
+Tile.prototype.getFontSize = function()		//Make a less stupid name for this function
 {
 	var valueString = this.value + "";
 	var length = valueString.length;

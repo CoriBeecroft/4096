@@ -11,6 +11,7 @@ var Cell = function(xPosition, yPosition, tile)
 
 Cell.prototype.getHTML = function()
 {
+	console.log(this.xPosition);
 	var $html = $("<div class='grid-cell' data-xPos = ' " + this.xPosition +  "' data-yPos = '" + this.	yPosition + "'></div>");
 
 	if(this.tile)

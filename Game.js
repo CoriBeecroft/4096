@@ -56,7 +56,7 @@ Game.prototype.runGame = function()
 				}
 			}
 			this.runGame();
-		}, this), 200);		
+		}, this), 50);		
 	}
 }
 

@@ -20,8 +20,7 @@ div.grid-cell
 
 div.tile
 {
-	/*padding: 10%;*/
-	position: absolute;
+	position: relative;
 	border-radius: 5px;
 	width: 106.25px;
 	height: 106.25px;
@@ -30,7 +29,13 @@ div.tile
 
 div.value
 {
-	margin: 10px;
+	position: absolute;
+	text-align: center;
+	display: inline-block;
+	vertical-align: middle;
+	line-height: 106.25px;
+	width: 106.25px;
+	height: 106.25px;
 	font-size: 100px;
 	font-weight: bold;
 	text-align: center;
