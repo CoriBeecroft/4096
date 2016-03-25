@@ -11,7 +11,6 @@ var Cell = function(xPosition, yPosition, tile)
 
 Cell.prototype.getHTML = function()
 {
-	console.log(this.xPosition);
 	var $html = $("<div class='grid-cell' data-xPos = ' " + this.xPosition +  "' data-yPos = '" + this.	yPosition + "'></div>");
 
 	if(this.tile)
@@ -22,7 +21,7 @@ Cell.prototype.getHTML = function()
 	return $html;
 }
 
-Cell.prototype.isEmpty = function()			//This function might be entirely unnecessary. 
+Cell.prototype.isEmpty = function()
 {
 	return this.tile ? false : true;
 }

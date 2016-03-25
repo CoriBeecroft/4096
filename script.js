@@ -6,49 +6,42 @@ var UP = 38;
 var DOWN = 40;
 var A = 65;
 
-$(document).ready(function(){
-	$('body').prepend("<div id='game-container'></div>")
+$(document).ready(function()
+{
+	$('body').prepend("<div id='game-container' tabindex='0'></div>");
+	$('#game-container').focus();		//gives #game-container focus on page load
 
- 	for(var i= 0; i<1; i++)
- 	{
- 		grid = new Grid(4, 4);
+	grid = new Grid(4, 4);
 
-		//Add tiles
-		grid.addNewTile();
-		grid.addNewTile();
+	var game = new Game(grid);
 
-		//Render grid
-		grid.render();
-
- 		var game = new Game();
-		$('body').keydown(function(e) 	// this shouldn't be on body, make sure to fix this. 
-		{
-console.log("other keydown");
-			var key = e.keyCode;
-			if(isValidKey(key))	
-			{
-				var direction;
-				switch(key)
-				{
-					case A: 
-						game.setAutomated(!game.automated);
-						game.runGame();
-						break;
-				}
-			}
-		})
-
-	$('body').keydown(function(e) 	// this shouldn't be on body, make sure to fix this. 
+	$('div#game-container').keydown(function(e) 	
 	{
-		game.makeMove(e.keyCode)
+		e.stopPropagation();
+	
+		var key = e.keyCode;
+		if(isValidKey(key))	
+		{
+			var direction;
+			switch(key)
+			{
+				case A: 
+					game.setAutomated(!game.automated);
+					game.runGame();
+					break;
+				default: 
+					game.makeMove(e.keyCode);
+			}
+		}
 	});
 
-
-	//game.makeMove();
- 	}
+	$('button').click(function()
+	{
+		game.automatedAlgorithm = $('textarea').val();
+	});
 });
 
-var isValidKey = function(keyCode)
+var isValidKey = function(keyCode)				//is this the right place for this?
 {
 	var validKeys = [LEFT, RIGHT, UP, DOWN, A];
 	for(var i=0; i<validKeys.length; i++)
@@ -59,4 +52,11 @@ var isValidKey = function(keyCode)
 		}
 	}
 	return false;
+}
+
+
+
+for(var i=0; i<10; i++)
+{
+	console.log(i%5);
 }

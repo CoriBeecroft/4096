@@ -29,10 +29,10 @@ Grid.prototype.moveTiles = function(direction)
 
 	if(direction === "left")
 	{
-		for(var i=0; i<this.height; i++)
+		for(var i=0; i<this.height; i++) //Go through the rows
 		{
 			var current = this.getColumn(i);
-			do
+			do 								//Go through the rows
 			{
 				tileHasMoved = this.moveTile(current, direction, tileHasMoved);
 				current = current.down;
@@ -235,11 +235,11 @@ Grid.prototype.tileCanMoveOrMerge = function(cell, direction)
 	return canMove;
 }
 
-Grid.prototype.buildGrid = function()			//Uhh... refactor this, it's terrible. 
+Grid.prototype.buildGrid = function()			//Uhh... refactor this, it's terrible. Is it, though? Seriously consider this and actually refactor if so. 
 {
 	var tempGrid = [[],[],[],[]]; 			//Make this dynamic 
 	
-	for(var i=0; i<this.width; i++)
+	for(var i=0; i<this.width; i++)		//Add cells
 	{
 		for(var j=0; j<this.height; j++)
 		{
@@ -301,7 +301,7 @@ Grid.prototype.buildGrid = function()			//Uhh... refactor this, it's terrible.
 
 Grid.prototype.addNewTile = function()					//maybe return -1 if no tile is added.  
 {
-	var cell = this.findEmptyCell();
+	var cell = this.findRandomEmptyCell();
 	
 	if(cell)
 	{
@@ -309,7 +309,22 @@ Grid.prototype.addNewTile = function()					//maybe return -1 if no tile is added
 	}
 }
 
-Grid.prototype.findEmptyCell = function()						//This probably needs to be tested a little more. Check is grid is empty. 
+Grid.prototype.findRandomEmptyCell = function()	//This function might be kind of unnecessary, at the very learst it probably needs a new name
+{
+	var emptyCells = this.getEmptyCells();
+
+	if(emptyCells.length > 0)
+	{
+		var randomIndex = parseInt(Math.random()*emptyCells.length);
+		return emptyCells[randomIndex];	
+	}
+	else
+	{
+		return null;				//This is probably not necessary... but maybe makes it easier to read?
+	}
+}
+
+Grid.prototype.getEmptyCells = function()						//This probably needs to be tested a little more. Check if grid is empty. 
 {
 	var emptyCells = [];
 
@@ -326,15 +341,7 @@ Grid.prototype.findEmptyCell = function()						//This probably needs to be teste
 		}
 	}
 
-	if(emptyCells.length > 0)
-	{
-		var randomIndex = parseInt(Math.random()*emptyCells.length);
-		return emptyCells[randomIndex];	
-	}
-	else
-	{
-		return null;				//This is probably not necessary... but maybe makes it easier to read?
-	}
+	return emptyCells;
 }
 
 Grid.prototype.getCell = function(xPosition, yPosition)
@@ -370,7 +377,7 @@ Grid.prototype.getColumn = function(index)
 {
 	var columnHead = this.origin;
 
-	for(var i=0; i<index; i++)					//Might be off by one
+	for(var i=0; i<index; i++)					//Might be off by one, test this, need to be sure
 	{
 		columnHead = columnHead.right;
 	}
@@ -393,7 +400,7 @@ Grid.prototype.render = function()
 	}
 }
 
-Grid.prototype.canTilesMove = function()
+Grid.prototype.canTilesMoveOrMerge = function()
 {
 	this.tilesCanMove = false; 
 

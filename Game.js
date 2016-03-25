@@ -1,34 +1,29 @@
-var Game = function(playFunction)
+var Game = function(grid, automatedAlgorithm)
 {
-	//Do error checking on playFunction
-	this.playFunction = playFunction || this.makeAutomatedMove;
+	
+	this.grid = grid;
+	this.valueGrid = new ValueGrid(this.grid);
+	this.automatedAlgorithm = automatedAlgorithm;
 	this.dead = false;
 	this.lastMove = "left"; 
 	this.turn = 0;
 	this.nonMovingStreak = 0;
 	this.automated = false;
-	this.movesMade = 0;
+	this.automatedGameSpeed = 10;		//Milliseconds per automated turn
 
-	this.runGame();
+	//Add tiles
+	grid.addNewTile();
+	grid.addNewTile();
+
+	//Render grid
+	grid.render();		
+
+	this.runGame();	
 }
 
 Game.prototype.setAutomated = function(automated)
 {
-	console.log(automated)
-	if(automated)
-	{
-		if(!this.automated)
-		{
-			this.automated = true;
-		}
-	}
-	else
-	{
-		if(this.automated)
-		{
-			this.automated = false;
-		}
-	}
+	this.automated = automated;
 }
 
 Game.prototype.runGame = function()
@@ -39,30 +34,34 @@ Game.prototype.runGame = function()
 	}
 	else
 	{
-		setTimeout($.proxy(function()
+		var timeout;
+		if(!this.dead)
 		{
-			console.log("is this interval still going?");
-			if(!this.dead && this.automated)
+			timeout = setTimeout($.proxy(function()
 			{
-				console.log("fathead");
-				this.makeAutomatedMove();	
-				
-				grid.render();
-				this.turn++;
-
-				if(!grid.canTilesMove())
+				if(this.automated)
 				{
-					this.dead = true;
+					this.makeAutomatedMove();	
+					grid.render();
+
+					if(!grid.canTilesMoveOrMerge())
+					{
+						this.dead = true;
+					}
 				}
-			}
-			this.runGame();
-		}, this), 50);		
+				this.runGame();						//There is probably a better way to do this. Seriously look into it, this is probably pretty inefficient
+			}, this), this.automatedGameSpeed);
+		}
+		else
+		{
+			clearTimeout(timeout);				//Don't I need this somewhere else too? Am I running a bunch of threads when I keep toggling between automated and not? Consider this. 
+		}
 	}
 }
 
 Game.prototype.makeMove = function(key)
 {
-	if(isValidKey(key))	//Maybe this function should be in this class
+	if(isValidKey(key))
 	{
 		var direction;
 		switch(key)
@@ -87,32 +86,49 @@ Game.prototype.makeMove = function(key)
 	{
 		grid.addNewTile();
 	}
-	grid.render();
+	setTimeout(grid.render(), 2000);				//This seems odd, shouldn't I be rendering the grid much more frequently? How is this working?
+}
+
+Game.prototype.getNumFreeSpaces = function()		//Might not be necessary
+{
+	return grid.getEmptyCells().length;
 }
 
 Game.prototype.makeAutomatedMove = function()
 {
-	var direction;
+	eval(this.automatedAlgorithm);
 
-	if(!this.lastMove || this.lastMove === "left" || this.lastMove === "right" || this.lastMove === "up")
+
+
+/*	var direction;
+
+	if(this.getNumFreeSpaces() > 1)
 	{
-		direction = "down";
-		this.lastMove = "down";
+		if(!this.lastMove || this.lastMove === "left" || this.lastMove === "right" || this.lastMove === "up")
+		{
+			direction = "down";
+			this.lastMove = "down";
+		}
+		else if(this.nonMovingStreak > 5)
+		{
+			direction ="up";
+			this.lastMove = "up";
+		}
+		else if(this.nonMovingStreak > 3)
+		{
+			direction ="right";
+			this.lastMove = "right";
+		}
+		else
+		{
+			direction = "left";
+			this.lastMove = "left";
+		}
 	}
-	else if(this.nonMovingStreak > 5)//this.turn > 1 && parseInt(Math.random() * 50 + 1) === 1)
+	else 
 	{
-		direction ="up";
-		this.lastMove = "up";
-	}
-	else if(this.nonMovingStreak > 3)
-	{
-		direction ="right";
-		this.lastMove = "right";
-	}
-	else
-	{
-		direction = "left";
-		this.lastMove = "left";
+		console.log(this.valueGrid.canMoveInDirection("left"));
+		this.setAutomated(false);
 	}
 
 	var tileHasMoved = grid.moveTiles(direction);
@@ -125,4 +141,7 @@ Game.prototype.makeAutomatedMove = function()
 	{
 		this.nonMovingStreak++;
 	}
+
+	/*console.log(this.valueGrid.getHighestValue());*/
+
 }

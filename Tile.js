@@ -1,27 +1,25 @@
-var Tile = function(x, y, value)
+var Tile = function(x, y, value)		//What is this value being passed in? oh, nevermind, probably?
 {
-	//generate coordinates
-	//Right now this is for an empty grid, later change this so that it picks a random x or y that has empty spaces, then randomly pick from the empty spacecs. 
 	this.x = x;
 	this.y = y;
 	this.hasMerged = false;
-
-	//generate value
-	this.value = value || (parseInt(Math.random()*10) % 5000 == 0) ? (4) : (2);
+	
+	//generate value 80% chance of beig 2, 20% chance of being 4
+	this.value = value || (parseInt(Math.random()*10) % 5 == 0) ? (4) : (2);
 }
 
 Tile.prototype.getHTML = function()
 {
-	return $("<div class='tile' x='" + this.x + "' y='" + this.y + "' style = 'background-color: " + this.getColor() + "'>" + "<div class=value style = 'font-size: " + this.getFontSize() + /*"px; margin-top: " + (106.25 - this.getFontSize())/2 +*/ "px'>"  + this.value + "</div></div>");
+	return $("<div class='tile' x='" + this.x + "' y='" + this.y + "' style = 'background-color: " + this.getColor() + "'>" + "<div class=value style = 'font-size: " + this.getFontSize() + "px'>"  + this.value + "</div></div>");
 }
 
-Tile.prototype.getFontSize = function()		//Make a less stupid name for this function
+Tile.prototype.getFontSize = function()		//Make a less stupid name for this function. Wait, is this really a stupid name for this function? I don't know, reconsider this whole issue at some point
 {
 	var valueString = this.value + "";
 	var length = valueString.length;
 	var size;
 
-	//Might need more cases(including potentially a truncate), but this is good for now
+	//Might eventually need more cases(including potentially a truncate), but this is good for now
 	if(length < 5)
 	{
 		size = parseInt(100 - (length-1)*25);
@@ -40,60 +38,10 @@ Tile.prototype.getFontSize = function()		//Make a less stupid name for this func
 
 Tile.prototype.getColor = function()
 {
-/*	var red = this.calculateColorComponent(102, 255, 10, 16);
-	var green = this.calculateColorComponent(102, 200, 1, 8);
-	var blue = this.calculateColorComponent(102, 200, 3, 12);
-
-	return "#" + red + green + blue;*/
-	var hue;
-//	console.log("(" + this.value + ", " + hue + ")");
-	//if(this.value < 256)
-//	{
-		hue = Math.log2(this.value) * 5;
-//	}
-//	else
-//	{
-//		hue = Math.log2(this.value) * 8;
-//	}
+	var hue = Math.log2(this.value) * 5;
 
 	return "hsla(" + hue + "," + 75 + "%," + 35 + "%," + 1 + ")";
 }
-
-Tile.prototype.calculateColorComponent = function(initialValue, finalValue, startingPower, endingPower)
-{
-	var slope = parseInt((255-initialValue)/(endingPower-startingPower));
-	var power = this.getPower();
-
-	if(power >= startingPower && power <= endingPower)
-	{
-		console.log(((power-startingPower)*slope + initialValue).toString(16));
-		return ((power-startingPower)*slope + initialValue).toString(16);
-	}
-	else
-	{
-		return "00";
-	}
-}
-
-Tile.prototype.getPower = function()
-{
-	var power = 1;
-	var tempValue = 2
-
-	while(tempValue !== this.value)
-	{
-		tempValue *= 2;
-		power++;
-	}
-
-	return power;
-}
-
-Tile.prototype.formatHexNumber = function(number)
-{
-	//if(number.)
-}
-
 
 Tile.prototype.move = function(x, y)
 {
