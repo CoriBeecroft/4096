@@ -14,6 +14,7 @@ $(document).ready(function()
 	grid = new Grid(4, 4);
 
 	var game = new Game(grid);
+	game.automatedAlgorithm = $('textarea').val();
 
 	$('div#game-container').keydown(function(e) 	
 	{
@@ -52,11 +53,4 @@ var isValidKey = function(keyCode)				//is this the right place for this?
 		}
 	}
 	return false;
-}
-
-
-
-for(var i=0; i<10; i++)
-{
-	console.log(i%5);
 }
