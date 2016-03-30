@@ -22,69 +22,28 @@ TileManager.prototype.addTile = function()			//Should be adds new tile in random
 		//Add tile
 		var tile = new Tile(randomCell);
 		randomCell.addTile(tile);
+	//	this.grid.render();
+		return tile;
 	}
 	else //return error
 	{
 		return -1;
 	}
+
 }
 
-TileManager.prototype.animateTiles = function(direction)			//ok for now, but it will be pretty damn different once movement is implemented
+TileManager.prototype.animateNewTile = function(tile)
 {
-	//Try to make this simpler later
-	if(direction == 'left')
-	{
-		var nonEmptyCells = this.gridAnalyzer.getNonEmptyCells();
-	
-		for (var i = 0; i<nonEmptyCells.length; i++)
-		{
-			var tile = nonEmptyCells[i].tile;
-			var numCellsToMove = tile.moveLeft;
-			var distanceToMove = (Grid.cellWidth + Grid.cellMargin) * numCellsToMove;
-			tile.getElement().animate({right: distanceToMove + "px"}, 300, $.proxy(this.afterAnimation, this, tile));
-		}
-	}
-	else if(direction == 'right')
-	{
-		var nonEmptyCells = this.gridAnalyzer.getNonEmptyCells();
-	
-		for (var i = 0; i<nonEmptyCells.length; i++)
-		{
-			var tile = nonEmptyCells[i].tile;
-			var numCellsToMove = tile.moveRight;
-			var distanceToMove = (Grid.cellWidth + Grid.cellMargin) * numCellsToMove;
-			tile.getElement().animate({left: distanceToMove + "px"}, 300, $.proxy(this.afterAnimation, this, tile));
-		}	
-	}
-	else if(direction == 'up')
-	{
-		var nonEmptyCells = this.gridAnalyzer.getNonEmptyCells();
-	
-		for (var i = 0; i<nonEmptyCells.length; i++)
-		{
-			var tile = nonEmptyCells[i].tile;
-			var numCellsToMove = tile.moveUp;
-			var distanceToMove = (Grid.cellWidth + Grid.cellMargin) * numCellsToMove;
-			tile.getElement().animate({bottom: distanceToMove + "px"}, 300, $.proxy(this.afterAnimation, this, tile));
-		}
-	}
-	else if(direction == 'down')
-	{
-		var nonEmptyCells = this.gridAnalyzer.getNonEmptyCells();
-	
-		for (var i = 0; i<nonEmptyCells.length; i++)
-		{
-			var tile = nonEmptyCells[i].tile;
-			var numCellsToMove = tile.moveDown;
-			var distanceToMove = (Grid.cellWidth + Grid.cellMargin) * numCellsToMove;
-			tile.getElement().animate({top: distanceToMove + "px"}, 300, $.proxy(this.afterAnimation, this, tile));
-		}
-	}	
+	console.log(tile);
+	tile.getElement().animate({height: "106px", width: "106.25px"}, 5000, function(){});
 }
 
-TileManager.prototype.afterAnimation = function(tile)		//Reconsider name
+TileManager.prototype.animateTiles = function(direction)
 {
-	//Update new tiles positions, mergeable tiles are merged and add a new tile to the grid
-	tile.updatePosition();
-	this.grid.render();
+	var cells = this.gridAnalyzer.getNonEmptyCells();
+
+	for(var i=0; i<cells.length; i++)
+	{
+		cells[i].tile.animateMove(direction);
+	}
 }

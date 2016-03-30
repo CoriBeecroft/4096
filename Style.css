@@ -51,12 +51,10 @@ div.tile
 	border-radius: 5px;
 	width: 106.25px;
 	height: 106.25px;
-	background-color: #bb0000;
 	display: inline-block;
 	vertical-align: middle;
 	line-height: 106.25px;
 	text-align: center;
-	font-size: 100px;
 	font-weight: bold;
 	font-family: Arial;
 }

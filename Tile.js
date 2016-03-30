@@ -32,7 +32,7 @@ Tile.prototype.getElement = function()
 			thisTile = currentTile;
 		}
 	}
-	console.log();
+
 	return thisTile;
 }
 
@@ -84,6 +84,34 @@ Tile.prototype.updatePosition = function()
 	this.moveRight = 0; 
 	this.moveUp = 0;
 	this.moveDown = 0;
+}
 
-//	this.element = $("<div class='tile' x='" + this.cell.xPosition + "' y='" + this.cell.yPosition + "'>" + this.value + "</div>");*/
+Tile.prototype.animateMove = function(direction)
+{
+	if(direction == 'left')
+	{
+		var moveDistancePixels = ((Grid.cellWidth + Grid.cellMargin) * this.moveLeft) * -1;
+		this.getElement().animate({left: "+=" + moveDistancePixels + "px"}, 300, $.proxy(this.afterAnimateMove, this));
+	}
+	else if(direction == 'right')
+	{
+		var moveDistancePixels = (Grid.cellWidth + Grid.cellMargin) * this.moveRight;
+		this.getElement().animate({left: "+=" + moveDistancePixels + "px"}, 300, $.proxy(this.afterAnimateMove, this));
+	}
+	else if(direction == 'up')
+	{
+		var moveDistancePixels = ((Grid.cellWidth + Grid.cellMargin) * this.moveUp) * -1;
+		this.getElement().animate({top: "+=" + moveDistancePixels + "px"}, 300, $.proxy(this.afterAnimateMove, this));
+	}
+	else if(direction == 'down')
+	{
+		var moveDistancePixels = (Grid.cellWidth + Grid.cellMargin) * this.moveDown;
+		this.getElement().animate({top: "+=" + moveDistancePixels + "px"}, 300, $.proxy(this.afterAnimateMove, this));
+	}	
+}
+
+Tile.prototype.afterAnimateMove = function()
+{
+	this.updatePosition();
+	this.cell.grid.render();
 }

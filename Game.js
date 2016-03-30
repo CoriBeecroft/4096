@@ -66,11 +66,7 @@ Game.prototype.runGame = function()
 Game.prototype.takeTurn = function(key)
 {
 	var direction = this.getDirectionFromInput(key);
-	//maybe put these two in makeMove();
-	//calculate new tile positions
 	this.gridAnalyzer.calculateMovedTilePositions(direction);
-
-	//animate tiles moving to their new positions
 	this.tileManager.animateTiles(direction);
 }
 
@@ -103,8 +99,6 @@ Game.prototype.getDirectionFromInput = function(key)
 
 Game.prototype.makeMove = function(key)
 {
-
-
 //	var tileHasMoved = grid.moveTiles(direction);
 //	if(tileHasMoved)
 //	{
