@@ -15,8 +15,8 @@ var Game = function(grid, automatedAlgorithm)
 	this.automatedGameSpeed = 10;		//Milliseconds per automated turn
 	
 	//Add tiles
-	this.tileManager.addTile();
-	this.tileManager.addTile();
+	this.tileManager.addTile(false);
+	this.tileManager.addTile(false);
 
 
 	//Render grid
@@ -67,6 +67,7 @@ Game.prototype.takeTurn = function(key)
 {
 	var direction = this.getDirectionFromInput(key);
 	this.gridAnalyzer.calculateMovedTilePositions(direction);
+	this.tileManager.addTile(true);
 	this.tileManager.animateTiles(direction);
 }
 

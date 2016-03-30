@@ -1,9 +1,11 @@
-var Tile = function(cell, value)
+var Tile = function(cell, genesisAnimated, value)
 {
 	this.cell = cell;
+	this.genesisAnimated = genesisAnimated;		//Needs a better name
 
 	this.hasMerged = false;
-	
+	this.generatedButNotAnimated = true;
+
 	this.moveLeft = 0;
 	this.moveRight = 0;
 	this.moveUp = 0; 
@@ -11,6 +13,16 @@ var Tile = function(cell, value)
 	
 	//generate value 80% chance of beig 2, 20% chance of being 4
 	this.value = value || (parseInt(Math.random()*10) % 5 == 0) ? (4) : (2);
+
+	this.addToDOM();
+}
+
+Tile.prototype.addToDOM = function()
+{
+	if(!this.getElement())
+	{
+		this.cell.getElement().append(this.getHTML());
+	}
 }
 
 Tile.prototype.getHTML = function()
@@ -36,7 +48,7 @@ Tile.prototype.getElement = function()
 	return thisTile;
 }
 
-Tile.prototype.getFontSize = function()		//Make a less stupid name for this function. Wait, is this really a stupid name for this function? I don't know, reconsider this whole issue at some point
+Tile.prototype.getFontSize = function()
 {
 	var valueString = this.value + "";
 	var length = valueString.length;
@@ -66,12 +78,76 @@ Tile.prototype.getColor = function()
 	return "hsla(" + hue + "," + 75 + "%," + 35 + "%," + 1 + ")";
 }
 
+Tile.prototype.animate = function()
+{
+
+	if(this.generatedButNotAnimated && this.genesisAnimated)
+	{
+		this.animateGenesis();
+	}
+
+	if(this.moveLeft > 0 || this.moveRight > 0 || this.moveUp > 0 || this.moveDown > 0)
+	{
+		this.animateMove();
+	}
+}
+
+Tile.prototype.animateGenesis = function()
+{
+	var element = this.getElement();
+	element.css("height", 0 + "px");
+	element.css("width", 0 + "px");
+	element.animate({height: 106.25 + "px", width: 106.25 + "px"}, 300, $.proxy(this.afterAnimateGenesis, this))
+}
+
+Tile.prototype.afterAnimateGenesis = function()
+{
+	this.generatedButNotAnimated = false;
+}
+
+Tile.prototype.animateMove = function()
+{
+	var cssProperty;
+
+	if(this.moveLeft > 0)
+	{
+		var moveDistancePixels = ((Grid.cellWidth + Grid.cellMargin) * this.moveLeft) * -1;
+		cssProperty = {left: "+=" + moveDistancePixels + "px"};
+	}
+	else if(this.moveRight > 0)
+	{
+		var moveDistancePixels = (Grid.cellWidth + Grid.cellMargin) * this.moveRight;
+		cssProperty = {left: "+=" + moveDistancePixels + "px"};
+	}
+	else if(this.moveUp > 0)
+	{
+		var moveDistancePixels = ((Grid.cellWidth + Grid.cellMargin) * this.moveUp) * -1;
+		cssProperty = {top: "+=" + moveDistancePixels + "px"};
+	}
+	else if(this.moveDown > 0)
+	{
+		var moveDistancePixels = (Grid.cellWidth + Grid.cellMargin) * this.moveDown;
+		cssProperty = {top: "+=" + moveDistancePixels + "px"};
+	}	
+	else
+	{
+		return;
+	}
+
+	this.getElement().animate(cssProperty, 300, $.proxy(this.afterAnimateMove, this));
+}
+
+Tile.prototype.afterAnimateMove = function()
+{
+	this.updatePosition();
+//	this.cell.grid.render();
+}
+
 Tile.prototype.updatePosition = function()
 {
-	//remove tile from cell
 	this.cell.removeTile();
 
-	//Find new cell
+	//Find new cell in grid
 	var newX = this.cell.xPosition + this.moveRight - this.moveLeft;
 	var newY = this.cell.yPosition + this.moveDown - this.moveUp;
 
@@ -84,34 +160,4 @@ Tile.prototype.updatePosition = function()
 	this.moveRight = 0; 
 	this.moveUp = 0;
 	this.moveDown = 0;
-}
-
-Tile.prototype.animateMove = function(direction)
-{
-	if(direction == 'left')
-	{
-		var moveDistancePixels = ((Grid.cellWidth + Grid.cellMargin) * this.moveLeft) * -1;
-		this.getElement().animate({left: "+=" + moveDistancePixels + "px"}, 300, $.proxy(this.afterAnimateMove, this));
-	}
-	else if(direction == 'right')
-	{
-		var moveDistancePixels = (Grid.cellWidth + Grid.cellMargin) * this.moveRight;
-		this.getElement().animate({left: "+=" + moveDistancePixels + "px"}, 300, $.proxy(this.afterAnimateMove, this));
-	}
-	else if(direction == 'up')
-	{
-		var moveDistancePixels = ((Grid.cellWidth + Grid.cellMargin) * this.moveUp) * -1;
-		this.getElement().animate({top: "+=" + moveDistancePixels + "px"}, 300, $.proxy(this.afterAnimateMove, this));
-	}
-	else if(direction == 'down')
-	{
-		var moveDistancePixels = (Grid.cellWidth + Grid.cellMargin) * this.moveDown;
-		this.getElement().animate({top: "+=" + moveDistancePixels + "px"}, 300, $.proxy(this.afterAnimateMove, this));
-	}	
-}
-
-Tile.prototype.afterAnimateMove = function()
-{
-	this.updatePosition();
-	this.cell.grid.render();
 }

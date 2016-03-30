@@ -8,7 +8,7 @@ var Cell = function(xPosition, yPosition, grid)
 
 Cell.prototype.getHTML = function()
 {
-	var $html = $("<div class='grid-cell' data-xPos = ' " + this.xPosition +  "' data-yPos = '" + this.	yPosition + "'></div>");
+	var $html = $("<div class='cell' x = '" + this.xPosition +  "' y = '" + this.	yPosition + "'></div>");
 	
 	if(this.tile)
 	{
@@ -16,6 +16,24 @@ Cell.prototype.getHTML = function()
 	}
 
 	return $html;
+}
+
+Cell.prototype.getElement = function()
+{
+	var cells = $('div.cell');
+	var thisCell;
+
+	for(var i=0; i<cells.length; i++)
+	{
+		var currentCell = cells.eq(i);
+		
+		if(currentCell.attr('x') === (this.xPosition + "") && currentCell.attr('y') === (this.yPosition + ""))
+		{
+			thisCell = currentCell;
+		}
+	}
+
+	return thisCell;
 }
 
 Cell.prototype.isEmpty = function()
@@ -31,5 +49,4 @@ Cell.prototype.addTile = function(tile)
 Cell.prototype.removeTile = function()
 {
 	this.tile = null;
-	$('div.grid-cell').empty();
 }

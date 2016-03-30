@@ -21,6 +21,8 @@ Grid.prototype.init = function()
 			this.cells[i][j] = new Cell(i, j, this);
 		}
 	}
+
+	this.render();
 }
 
 Grid.prototype.render = function()

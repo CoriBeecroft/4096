@@ -34,7 +34,7 @@ div#grid
 	margin: auto;
 }
 
-div.grid-cell
+div.cell
 {
 	border-radius: 5px;
 	background-color: grey;
