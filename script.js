@@ -8,8 +8,8 @@ var A = 65;
 
 $(document).ready(function()
 {
-	$('body').prepend("<div id='game-container' tabindex='0'></div>");
-	$('#game-container').focus();		//gives #game-container focus on page load
+	$('main').prepend("<h1>4096</h1><div id='game-container' tabindex='0'></div>");
+	$('#game-container').focus();
 
 	grid = new Grid(4, 4);
 
@@ -31,7 +31,7 @@ $(document).ready(function()
 					game.runGame();
 					break;
 				default: 
-					game.makeMove(e.keyCode);
+					game.takeTurn(e.keyCode);
 			}
 		}
 	});

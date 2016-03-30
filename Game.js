@@ -3,6 +3,9 @@ var Game = function(grid, automatedAlgorithm)
 	
 	this.grid = grid;
 	this.valueGrid = new ValueGrid(this.grid);
+	this.gridAnalyzer = new GridAnalyzer(this.grid);
+	this.tileManager = new TileManager(this.grid, this.gridAnalyzer);
+
 	this.automatedAlgorithm = automatedAlgorithm;
 	this.dead = false;
 	this.lastMove = "left"; 
@@ -10,15 +13,16 @@ var Game = function(grid, automatedAlgorithm)
 	this.nonMovingStreak = 0;
 	this.automated = false;
 	this.automatedGameSpeed = 10;		//Milliseconds per automated turn
-
+	
 	//Add tiles
-	grid.addNewTile();
-	grid.addNewTile();
+	this.tileManager.addTile();
+	this.tileManager.addTile();
+
 
 	//Render grid
-	grid.render();		
+	this.grid.render();		//Might not even want this here, or maybe this is the only place it should be, because it just needs to render once, then never again, the only thing that will change is the tiles on top of the grid. 
+	//this.runGame();	
 
-	this.runGame();	
 }
 
 Game.prototype.setAutomated = function(automated)
@@ -59,11 +63,24 @@ Game.prototype.runGame = function()
 	}
 }
 
-Game.prototype.makeMove = function(key)
+Game.prototype.takeTurn = function(key)
 {
+	var direction = this.getDirectionFromInput(key);
+	//maybe put these two in makeMove();
+	//calculate new tile positions
+	this.gridAnalyzer.calculateMovedTilePositions(direction);
+
+	//animate tiles moving to their new positions
+	this.tileManager.animateTiles(direction);
+}
+
+
+Game.prototype.getDirectionFromInput = function(key)
+{
+	var direction;
+
 	if(isValidKey(key))
 	{
-		var direction;
 		switch(key)
 		{
 			case LEFT: 
@@ -81,24 +98,24 @@ Game.prototype.makeMove = function(key)
 		}
 	}
 
-	var tileHasMoved = grid.moveTiles(direction);
-	if(tileHasMoved)
-	{
-		grid.addNewTile();
-	}
-	setTimeout(grid.render(), 2000);				//This seems odd, shouldn't I be rendering the grid much more frequently? How is this working?
+	return direction;
 }
 
-Game.prototype.getNumFreeSpaces = function()		//Might not be necessary
+Game.prototype.makeMove = function(key)
 {
-	return grid.getEmptyCells().length;
+
+
+//	var tileHasMoved = grid.moveTiles(direction);
+//	if(tileHasMoved)
+//	{
+//		grid.addNewTile();
+//	}
+	//setTimeout(grid.render(), 2000);				//This seems odd, shouldn't I be rendering the grid much more frequently? How is this working?
 }
 
 Game.prototype.makeAutomatedMove = function()
 {
 	eval(this.automatedAlgorithm);
-
-
 
 /*	var direction;
 

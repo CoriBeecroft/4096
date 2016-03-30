@@ -8,55 +8,64 @@
         <script src="jquery-2.1.1.js"></script>
 	</head>
 	<body>
-      	<textarea>
-			var direction;
 
-			if(this.getNumFreeSpaces() > 1)
-			{
-				if(!this.lastMove || this.lastMove === "left" || this.lastMove === "right" || this.lastMove === "up")
-				{
-					direction = "down";
-					this.lastMove = "down";
-				}
-				else if(this.nonMovingStreak > 5)
-				{
-					direction ="up";
-					this.lastMove = "up";
-				}
-				else if(this.nonMovingStreak > 3)
-				{
-					direction ="right";
-					this.lastMove = "right";
-				}
-				else
-				{
-					direction = "left";
-					this.lastMove = "left";
-				}
-			}
-			else 
-			{
-				this.setAutomated(false);
-			}
+		<main>
+			<section id="automated-tools">			<!-- Might be a better class name for this -->
+				<h2>Algorithm for Automated Gameplay</h2>
+			    <textarea>
+var direction;
 
-			var tileHasMoved = grid.moveTiles(direction);
-			if(tileHasMoved)
-			{
-				grid.addNewTile();
-				this.nonMovingStreak = 0;
-			}
-			else
-			{
-				this.nonMovingStreak++;
-			}
+if(this.getNumFreeSpaces() > 1)
+{
+	if(!this.lastMove || this.lastMove === "left" || this.lastMove === "right" || this.lastMove === "up")
+	{
+		direction = "down";
+		this.lastMove = "down";
+	}
+	else if(this.nonMovingStreak > 5)
+	{
+		direction ="up";
+		this.lastMove = "up";
+	}
+	else if(this.nonMovingStreak > 3)
+	{
+		direction ="right";
+		this.lastMove = "right";
+	}
+	else
+	{
+		direction = "left";
+		this.lastMove = "left";
+	}
+}
+else 
+{
+	this.setAutomated(false);
+}
+
+var tileHasMoved = grid.moveTiles(direction);
+if(tileHasMoved)
+{
+	grid.addNewTile();
+	this.nonMovingStreak = 0;
+}
+else
+{
+	this.nonMovingStreak++;
+}
 
 
-      	</textarea>
-      	<button>Submit</button>
+      			</textarea>
+      			<button>Submit</button>
+			</section>
+
+		</main>
 		<script type="text/javascript" src="Cell.js"></script>
 		<script type="text/javascript" src="Grid.js"></script>
-		<script type="text/javascript" src="ValueGrid.js"></script>
+		<script type="text/javascript" src="GridAnalyzer.js"></script>
+		<script type="text/javascript" src="TileManager.js"></script>
 		<script type="text/javascript" src="Tile.js"></script>
+		<script type="text/javascript" src="ValueGrid.js"></script>
 		<script type="text/javascript" src="Game.js"></script>
         <script type="text/javascript" src="script.js"></script>
     </body>

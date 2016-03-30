@@ -1,18 +1,15 @@
-var Cell = function(xPosition, yPosition, tile)
+var Cell = function(xPosition, yPosition, grid)
 {
 	this.xPosition = xPosition || 0;
 	this.yPosition = yPosition || 0;
-	this.tile = tile;
-	this.right;
-	this.left;
-	this.up;
-	this.down;
+	this.tile;
+	this.grid = grid;
 }
 
 Cell.prototype.getHTML = function()
 {
 	var $html = $("<div class='grid-cell' data-xPos = ' " + this.xPosition +  "' data-yPos = '" + this.	yPosition + "'></div>");
-
+	
 	if(this.tile)
 	{
 		$($html).append(this.tile.getHTML());
@@ -26,25 +23,13 @@ Cell.prototype.isEmpty = function()
 	return this.tile ? false : true;
 }
 
-Cell.prototype.link = function(cell, direction)
+Cell.prototype.addTile = function(tile)
 {
-	switch(direction)
-	{
-		case "right": 
-			this.right = cell;
-			cell.left = this;
-			break;
-		case "left": 
-			this.left = cell;
-			cell.right = this;
-			break;
-		case "up": 
-			this.up = cell;
-			cell.down = this;
-			break;
-		case "down": 
-			this.down = cell;
-			cell.up = this;
-			break;
-	}
+	this.tile = tile;
+}
+
+Cell.prototype.removeTile = function()
+{
+	this.tile = null;
+	$('div.grid-cell').empty();
 }

@@ -10,7 +10,7 @@ var ValueGrid = function(sourceGrid)
 
 ValueGrid.prototype.update = function()
 {
-	for(var i=0; i<this.sourceGrid.width; i++)
+/*	for(var i=0; i<this.sourceGrid.width; i++)
 	{
 		var current = this.sourceGrid.getColumn(i);
 		for(var j=0; j<this.sourceGrid.height; j++)
@@ -18,12 +18,12 @@ ValueGrid.prototype.update = function()
 			this.grid[i][j] = current.tile ? current.tile.value : 0;
 			current = current.down;
 		}
-	}
+	}*/
 }
 
 ValueGrid.prototype.getPossibleMerges = function(direction)
 {
-	this.update();
+/*	this.update();
 
 	var count = 0;
 	if(direction == 'left' || direction == 'right')		//Make this so case doesn't matter
@@ -56,7 +56,7 @@ ValueGrid.prototype.getPossibleMerges = function(direction)
 		}
 	}
 
-	return count;
+	return count;*/
 }
 
 ValueGrid.prototype.canMoveInDirection = function(direction)	//This probably needs a better name or at least should be consistent with the similar merge function
@@ -70,7 +70,7 @@ ValueGrid.prototype.canMoveInDirection = function(direction)	//This probably nee
 
 ValueGrid.prototype.getHighestValue = function()
 {
-	this.update();
+/*	this.update();
 
 	var highest = 0;
 
@@ -85,12 +85,12 @@ ValueGrid.prototype.getHighestValue = function()
 		}
 	}
 
-	return highest;
+	return highest;*/
 }
 
 ValueGrid.prototype.print = function()
 {
-	var string = "";
+/*	var string = "";
 	
 	for(var j=0; j<this.height; j++)
 	{
@@ -101,5 +101,5 @@ ValueGrid.prototype.print = function()
 		string +="\n";
 	}
 
-	console.log(string);
+	console.log(string);*/
 }

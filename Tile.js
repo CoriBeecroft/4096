@@ -1,8 +1,13 @@
-var Tile = function(x, y, value)		//What is this value being passed in? oh, nevermind, probably?
+var Tile = function(cell, value)
 {
-	this.x = x;
-	this.y = y;
+	this.cell = cell;
+
 	this.hasMerged = false;
+	
+	this.moveLeft = 0;
+	this.moveRight = 0;
+	this.moveUp = 0; 
+	this.moveDown = 0;
 	
 	//generate value 80% chance of beig 2, 20% chance of being 4
 	this.value = value || (parseInt(Math.random()*10) % 5 == 0) ? (4) : (2);
@@ -10,7 +15,25 @@ var Tile = function(x, y, value)		//What is this value being passed in? oh, neve
 
 Tile.prototype.getHTML = function()
 {
-	return $("<div class='tile' x='" + this.x + "' y='" + this.y + "' style = 'background-color: " + this.getColor() + "'>" + "<div class=value style = 'font-size: " + this.getFontSize() + "px'>"  + this.value + "</div></div>");
+	return $("<div class='tile' x='" + this.cell.xPosition + "' y='" + this.cell.yPosition + "' style = 'font-size: " + this.getFontSize() + "px; background-color: " + this.getColor() + "'>" + this.value + "</div>");
+}
+
+Tile.prototype.getElement = function()
+{
+	var tiles = $('div.tile');
+	var thisTile;
+
+	for(var i=0; i<tiles.length; i++)
+	{
+		var currentTile = tiles.eq(i);
+		
+		if(currentTile.attr('x') === (this.cell.xPosition + "") && currentTile.attr('y') === (this.cell.yPosition + ""))
+		{
+			thisTile = currentTile;
+		}
+	}
+	console.log();
+	return thisTile;
 }
 
 Tile.prototype.getFontSize = function()		//Make a less stupid name for this function. Wait, is this really a stupid name for this function? I don't know, reconsider this whole issue at some point
@@ -43,9 +66,24 @@ Tile.prototype.getColor = function()
 	return "hsla(" + hue + "," + 75 + "%," + 35 + "%," + 1 + ")";
 }
 
-Tile.prototype.move = function(x, y)
+Tile.prototype.updatePosition = function()
 {
-	this.x = x;
-	this.y = y;
-	this.element = $("<div class='tile' x='" + this.x + "' y='" + this.y + "'>" + this.value + "</div>");
+	//remove tile from cell
+	this.cell.removeTile();
+
+	//Find new cell
+	var newX = this.cell.xPosition + this.moveRight - this.moveLeft;
+	var newY = this.cell.yPosition + this.moveDown - this.moveUp;
+
+	var newCell = this.cell.grid.getCell(newX, newY);
+	this.cell = newCell;
+	this.cell.addTile(this);
+
+	//Reset move values
+	this.moveLeft = 0;
+	this.moveRight = 0; 
+	this.moveUp = 0;
+	this.moveDown = 0;
+
+//	this.element = $("<div class='tile' x='" + this.cell.xPosition + "' y='" + this.cell.yPosition + "'>" + this.value + "</div>");*/
 }
