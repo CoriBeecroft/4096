@@ -22,7 +22,6 @@ var Game = function(grid, automatedAlgorithm)
 	//Add tiles
 	this.tileManager.addTile();
 	this.tileManager.addTile();
-
 }
 
 Game.prototype.setAutomated = function(automated)

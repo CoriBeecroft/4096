@@ -3,8 +3,12 @@ var Tile = function(cell, tileManager, value)
 	this.cell = cell;
 	this.tileManager = tileManager;
 
-	this.hasMerged = false;
-	this.generatedButNotAnimated =false;// true;
+	this.generatedButNotAnimated = true;
+
+	this.hasMergeEngagement = false;
+	this.absorber = false;
+	this.betrothed;
+		
 
 	this.moveLeft = 0;
 	this.moveRight = 0;
@@ -77,6 +81,39 @@ Tile.prototype.getColor = function()
 	var hue = Math.log2(this.value) * 5;
 
 	return "hsla(" + hue + "," + 75 + "%," + 35 + "%," + 1 + ")";
+}
+
+Tile.prototype.canMerge = function(tile)
+{
+	//neither tile has a previous merge engagement and values are the same 
+	return !this.hasMergeEngagement && !tile.hasMergeEngagement && this.value === tile.value;
+}
+
+Tile.prototype.setMerge = function(tile, direction)
+{
+	this.hasMergeEngagement = true;
+	tile.hasMergeEngagement = true;
+
+	this.absorber = true; 
+
+	this.betrothed = tile; 
+	tile.betrothed = this;
+}
+
+Tile.prototype.executeMerge = function()
+{
+	if(!this.absorber || !this.hasMergeEngagement || !this.betrothed) //I mean, I think this is right, I don't think I want to merge the tiles if those values aren't present
+	{
+		return;
+	}
+
+	this.value *= 2;
+	
+	//reset merge values
+	this.hasMergeEngagement = false;
+	this.absorber = false;
+	this.betrothed = null;
+
 }
 
 Tile.prototype.animateGenesis = function()

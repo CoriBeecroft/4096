@@ -57,12 +57,22 @@ TileManager.prototype.animateTilesMoving = function(direction)		//Give this a be
 TileManager.prototype.afterTilesAnimate = function(direction)
 {
 	this.updateTilePositions(direction);
+	this.excuteTileMerges();
 	this.grid.render();
 	this.addTile();
 
 	clearInterval(this.areTilesAnimating);
 	keyHandlingInProgress = false;
 	manageKeydowns();
+}
+
+TileManager.prototype.excuteTileMerges = function()
+{
+	var cells = this.gridAnalyzer.getNonEmptyCells();
+	for(i=0; i<cells.length; i++)
+	{
+		cells[i].tile.executeMerge();
+	}
 }
 
 TileManager.prototype.updateTilePositions = function(direction)
