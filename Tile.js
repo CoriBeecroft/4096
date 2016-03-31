@@ -1,6 +1,7 @@
-var Tile = function(cell, value)
+var Tile = function(cell, tileManager, value)
 {
 	this.cell = cell;
+	this.tileManager = tileManager;
 
 	this.hasMerged = false;
 	this.generatedButNotAnimated =false;// true;
@@ -132,16 +133,14 @@ Tile.prototype.animateMove = function()
 		return;
 	}
 
-	this.getElement().animate(cssProperty, 1000, $.proxy(this.afterAnimateMove, this));
+	this.getElement().animate(cssProperty, 100, $.proxy(this.afterAnimateMove, this));
 
-	TileManager.tilesAnimating++;
+	this.tileManager.tilesAnimating++;
 }
 
 Tile.prototype.afterAnimateMove = function()
 {
-	this.updatePosition();
-	this.cell.grid.render();
-	TileManager.tilesAnimating--;
+	this.tileManager.tilesAnimating--;
 }
 
 Tile.prototype.updatePosition = function()

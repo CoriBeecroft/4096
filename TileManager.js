@@ -2,13 +2,13 @@ var TileManager = function(grid, gridAnalyzer)
 {
 	this.grid = grid;
 	this.gridAnalyzer = gridAnalyzer;
-	this.areTilesAnimating = setInterval(function(){}, 100);
+
+	this.areTilesAnimating;
+	this.tilesAnimating = 0;
 }
 
-TileManager.tilesAnimating = 0;				//Not sure if this makes sense, but it's convenient right now
-
 //Grid needs to be initialized first
-TileManager.prototype.addTile = function(animateGenesis)			//Should be adds new tile in random empty cell if no args, but if args, then adds specified tile to specified cell location
+TileManager.prototype.addTile = function()			//Should be adds new tile in random empty cell if no args, but if args, then adds specified tile to specified cell location
 {
 	//
 	//Add new tile to random empty cell in grid
@@ -24,7 +24,7 @@ TileManager.prototype.addTile = function(animateGenesis)			//Should be adds new 
 		var randomCell = emptyCells[randomIndex];	
 
 		//Add tile
-		var tile = new Tile(randomCell, animateGenesis);
+		var tile = new Tile(randomCell, this);
 		randomCell.addTile(tile);
 		return tile;
 	}
@@ -34,7 +34,7 @@ TileManager.prototype.addTile = function(animateGenesis)			//Should be adds new 
 	}
 }
 
-TileManager.prototype.animateTiles = function()
+TileManager.prototype.animateTiles = function(direction)
 {
 	var cells = this.gridAnalyzer.getNonEmptyCells();
 
@@ -46,19 +46,81 @@ TileManager.prototype.animateTiles = function()
 	//set an interval
 	this.areTilesAnimating = setInterval($.proxy(function()
 	{
-		console.log(TileManager.tilesAnimating);
-		if(TileManager.tilesAnimating == 0)
+		if(this.tilesAnimating == 0)
 		{
-			this.afterTilesAnimate();
+			this.afterTilesAnimate(direction);
 		}
-	}, this), 300);
+	}, this, direction), 10);
 }
 
 //A function to be called after all the tiles have animated and their callbacks have been executed
-TileManager.prototype.afterTilesAnimate = function()
+TileManager.prototype.afterTilesAnimate = function(direction)
 {
-	console.log("All tiles have finished animating");
+	this.updateTilePositions(direction);
+	this.grid.render();
+
 	clearInterval(this.areTilesAnimating);
 	keyHandlingInProgress = false;
 	manageKeydowns();
+}
+
+TileManager.prototype.updateTilePositions = function(direction)
+{
+	if(direction == 'left')
+	{
+		for(var j=0; j<this.grid.height; j++)
+		{
+			for(var i=0; i<this.grid.width; i++)
+			{
+				var currentCell = this.grid.cells[i][j];
+				if(!currentCell.isEmpty())
+				{
+					currentCell.tile.updatePosition();
+				}
+			}
+		}
+	}
+
+	else if(direction == 'right')
+	{
+		for(var j=0; j<this.grid.height; j++)
+		{
+			for(var i=this.grid.width-1; i>=0; i--)
+			{
+				var currentCell = this.grid.cells[i][j];
+				if(!currentCell.isEmpty())
+				{
+					currentCell.tile.updatePosition();
+				}
+			}
+		}
+	}
+	else if(direction == 'up')
+	{
+		for(var j=0; j<this.grid.height; j++)
+		{
+			for(var i=0; i<this.grid.width; i++)
+			{
+				var currentCell = this.grid.cells[i][j];
+				if(!currentCell.isEmpty())
+				{
+					currentCell.tile.updatePosition();
+				}
+			}
+		}
+	}
+	else if(direction == 'down')
+	{
+		for(var j=this.grid.height-1; j>=0; j--)
+		{
+			for(var i=0; i<this.grid.width; i++)
+			{
+				var currentCell = this.grid.cells[i][j];
+				if(!currentCell.isEmpty())
+				{
+					currentCell.tile.updatePosition();
+				}
+			}
+		}
+	}
 }
