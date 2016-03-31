@@ -7,6 +7,7 @@ GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)	//Maybe
 {
 	if(direction == 'left')
 	{
+		//Move
 		for(var i=0; i<this.grid.width; i++)//Still need to also check if they can merge. =)
 		{
 			for(var j=this.grid.height-1; j>=0; j--)
@@ -22,9 +23,42 @@ GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)	//Maybe
 				}
 			}
 		}
+
+		//Merge
+		for(var i=0; i<this.grid.height; i++)
+		{
+			var prevTile = null;				//Needs a better name
+			var numMerges = 0;
+			for(var j=0; j<this.grid.width; j++)
+			{
+				var currentTile = this.grid.cells[j][i].tile;
+				if(currentTile)
+				{
+					if(prevTile)
+					{
+						if(currentTile.canMerge(prevTile))
+						{
+							currentTile.setMerge(prevTile);						
+							numMerges++;
+							prevTile = null;
+						}
+						else
+						{
+							prevTile = currentTile
+						}
+					}
+					else
+					{
+						prevTile = currentTile;
+					}
+					currentTile.moveLeft += numMerges;
+				}
+			}
+		}
 	}
 	else if(direction == 'right')
 	{
+		//Move
 		for(var i=0; i<this.grid.width; i++)
 		{
 			for(var j=0; j<this.grid.height; j++)
@@ -39,9 +73,42 @@ GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)	//Maybe
 				}
 			}
 		}
+
+		//Merge
+		for(var i=0; i<this.grid.height; i++)
+		{
+			var prevTile = null;				//Needs a better name
+			var numMerges = 0;
+			for(var j=this.grid.width-1; j>=0; j--)
+			{
+				var currentTile = this.grid.cells[j][i].tile;
+				if(currentTile)
+				{
+					if(prevTile)
+					{
+						if(currentTile.canMerge(prevTile))
+						{
+							currentTile.setMerge(prevTile);						
+							numMerges++;
+							prevTile = null;
+						}
+						else
+						{
+							prevTile = currentTile
+						}
+					}
+					else
+					{
+						prevTile = currentTile;
+					}
+					currentTile.moveRight += numMerges;
+				}
+			}
+		}
 	}
 	else if(direction == 'up')
 	{
+		//Move
 		for(var j=0; j<this.grid.height; j++)
 		{
 			for(var i=this.grid.width-1; i>=0; i--)
@@ -56,9 +123,42 @@ GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)	//Maybe
 				}
 			}
 		}
+
+		//Merge
+		for(var j=0; j<this.grid.width; j++)
+		{
+			var prevTile = null;				//Needs a better name
+			var numMerges = 0;
+			for(var i=0; i<this.grid.height; i++)
+			{
+				var currentTile = this.grid.cells[j][i].tile;
+				if(currentTile)
+				{
+					if(prevTile)
+					{
+						if(currentTile.canMerge(prevTile))
+						{
+							currentTile.setMerge(prevTile);						
+							numMerges++;
+							prevTile = null;
+						}
+						else
+						{
+							prevTile = currentTile
+						}
+					}
+					else
+					{
+						prevTile = currentTile;
+					}
+					currentTile.moveUp += numMerges;
+				}
+			}
+		}
 	}
 	else if(direction == 'down')
 	{
+		//Move
 		for(var j=0; j<this.grid.height; j++)
 		{
 			for(var i=0; i<this.grid.width; i++)
@@ -73,25 +173,57 @@ GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)	//Maybe
 				}
 			}
 		}
+
+		//Merge
+		for(var j=0; j<this.grid.width; j++)
+		{
+			var prevTile = null;				//Needs a better name
+			var numMerges = 0;
+			for(var i=this.grid.height-1; i>=0; i--)
+			{
+				var currentTile = this.grid.cells[j][i].tile;
+				if(currentTile)
+				{
+					if(prevTile)
+					{
+						if(currentTile.canMerge(prevTile))
+						{
+							currentTile.setMerge(prevTile);						
+							numMerges++;
+							prevTile = null;
+						}
+						else
+						{
+							prevTile = currentTile
+						}
+					}
+					else
+					{
+						prevTile = currentTile;
+					}
+					currentTile.moveDown += numMerges;
+				}
+			}
+		}
 	}
 }
 
 GridAnalyzer.prototype.print = function()
 {
 	var toPrint = "";
-	for(var j=0; j<this.grid.height; j++)
+	for(var i=0; i<this.grid.width; i++)
 	{
-		for(var i=0; i<this.grid.width; i++)
+		for(var j=0; j<this.grid.height; j++)
 		{
 			toPrint += "[";
 			
-			if(this.grid.cells[i][j].isEmpty())
+			if(this.grid.cells[j][i].isEmpty())
 			{
 				toPrint += 0;
 			}
 			else
 			{
-				toPrint += this.grid.cells[i][j].tile.value;
+				toPrint += this.grid.cells[j][i].tile.value;
 			}
 
 			toPrint +="]";
