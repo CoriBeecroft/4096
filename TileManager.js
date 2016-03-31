@@ -34,13 +34,13 @@ TileManager.prototype.addTile = function()			//Should be adds new tile in random
 	}
 }
 
-TileManager.prototype.animateTiles = function(direction)
+TileManager.prototype.animateTilesMoving = function(direction)		//Give this a better name
 {
 	var cells = this.gridAnalyzer.getNonEmptyCells();
 
 	for(var i=0; i<cells.length; i++)
 	{
-		cells[i].tile.animate();
+		cells[i].tile.animateMove();
 	}
 
 	//set an interval
@@ -58,6 +58,7 @@ TileManager.prototype.afterTilesAnimate = function(direction)
 {
 	this.updateTilePositions(direction);
 	this.grid.render();
+	this.addTile();
 
 	clearInterval(this.areTilesAnimating);
 	keyHandlingInProgress = false;
