@@ -30,12 +30,10 @@ $(document).ready(function()
 
 var manageKeydowns = function(e)
 {
-	if(e)
-		e.stopPropagation();
-console.log("key handling in progress: " + keyHandlingInProgress);
 	if(!keyHandlingInProgress)
 	{
-		var keyEvent;					//This is actually an event object, right? Make sure
+		var keyEvent;
+		
 		if(keysToBeHandled.length > 0)
 		{
 			keyEvent = keysToBeHandled[0];
@@ -43,16 +41,16 @@ console.log("key handling in progress: " + keyHandlingInProgress);
 		}
 		else
 		{
-			if(e)
-				keyEvent = e;
+			keyEvent = e;
 		}
 		if(keyEvent)
+		{
 			keydownHandler(keyEvent);
+		}
 	}
 	else
 	{
-		if(e)
-			keysToBeHandled.push(e);
+		keysToBeHandled.push(e);
 	}
 }
 

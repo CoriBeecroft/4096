@@ -9,7 +9,7 @@ var Cell = function(xPosition, yPosition, grid)
 Cell.prototype.getHTML = function()
 {
 	var $html = $("<div class='cell' x = '" + this.xPosition +  "' y = '" + this.	yPosition + "'></div>");
-	
+
 	if(this.tile)
 	{
 		$($html).append(this.tile.getHTML());
@@ -26,7 +26,7 @@ Cell.prototype.getElement = function()
 	for(var i=0; i<cells.length; i++)
 	{
 		var currentCell = cells.eq(i);
-		
+
 		if(currentCell.attr('x') === (this.xPosition + "") && currentCell.attr('y') === (this.yPosition + ""))
 		{
 			thisCell = currentCell;
