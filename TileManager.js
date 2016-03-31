@@ -5,21 +5,20 @@ var TileManager = function(grid, gridAnalyzer)
 
 	this.areTilesAnimating;
 	this.tilesAnimating = 0;
+
+	this.tilesMovedOrMerged = false;
 }
 
+//Add new tile to random empty cell in grid
 //Grid needs to be initialized first
 TileManager.prototype.addTile = function()			//Should be adds new tile in random empty cell if no args, but if args, then adds specified tile to specified cell location
 {
-	//
-	//Add new tile to random empty cell in grid
-	//
-
-	//Find empty cells
 	var emptyCells = this.gridAnalyzer.getEmptyCells();
 	
-	//Pick a random one
+
 	if(emptyCells.length > 0)
 	{
+		//Pick a random empty cell
 		var randomIndex = parseInt(Math.random()*emptyCells.length);
 		var randomCell = emptyCells[randomIndex];	
 
@@ -59,7 +58,8 @@ TileManager.prototype.afterTilesAnimate = function(direction)
 	this.updateTilePositions(direction);
 	this.excuteTileMerges();
 	this.grid.render();
-	this.addTile();
+	if(this.tilesMovedOrMerged)
+		this.addTile();
 
 	clearInterval(this.areTilesAnimating);
 	keyHandlingInProgress = false;

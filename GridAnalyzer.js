@@ -3,8 +3,10 @@ var GridAnalyzer = function(grid)		//Tbh, this class is probably not necessary, 
 	this.grid = grid;
 }
 
-GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)	//Maybe a better name for this
+GridAnalyzer.prototype.calculateMovedAndMergedTilePositions = function(direction)	//Maybe a better name for this
 {
+	var tilesCanMoveOrMerge = false;
+
 	if(direction == 'left')
 	{
 		//Move
@@ -18,7 +20,10 @@ GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)	//Maybe
 					for(var k=j; k<this.grid.height; k++)		//kinda silly 'cause k=i is empty so this is inefficient, but don't want to just subtract 1 'cause errors n' shit
 					{
 						if(!this.grid.cells[k][i].isEmpty())
+						{
 							this.grid.cells[k][i].tile.moveLeft++;
+							tilesCanMoveOrMerge = true;
+						}
 					}
 				}
 			}
@@ -40,6 +45,7 @@ GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)	//Maybe
 						{
 							currentTile.setMerge(prevTile);						
 							numMerges++;
+							tilesCanMoveOrMerge = true;
 							prevTile = null;
 						}
 						else
@@ -68,7 +74,10 @@ GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)	//Maybe
 					for(var k=j; k>=0; k--)
 					{
 						if(!this.grid.cells[k][i].isEmpty())
+						{
 							this.grid.cells[k][i].tile.moveRight++;
+							tilesCanMoveOrMerge = true;
+						}
 					}
 				}
 			}
@@ -90,6 +99,7 @@ GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)	//Maybe
 						{
 							currentTile.setMerge(prevTile);						
 							numMerges++;
+							tilesCanMoveOrMerge = true;
 							prevTile = null;
 						}
 						else
@@ -118,7 +128,10 @@ GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)	//Maybe
 					for(var k=i; k<this.grid.width; k++)
 					{
 						if(!this.grid.cells[j][k].isEmpty())
+						{
 							this.grid.cells[j][k].tile.moveUp++;
+							tilesCanMoveOrMerge = true;
+						}
 					}
 				}
 			}
@@ -140,6 +153,7 @@ GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)	//Maybe
 						{
 							currentTile.setMerge(prevTile);						
 							numMerges++;
+							tilesCanMoveOrMerge = true;
 							prevTile = null;
 						}
 						else
@@ -168,7 +182,10 @@ GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)	//Maybe
 					for(var k=i; k>=0; k--)
 					{
 						if(!this.grid.cells[j][k].isEmpty())
+						{
 							this.grid.cells[j][k].tile.moveDown++;
+							tilesCanMoveOrMerge = true;
+						}
 					}
 				}
 			}
@@ -190,6 +207,7 @@ GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)	//Maybe
 						{
 							currentTile.setMerge(prevTile);						
 							numMerges++;
+							tilesCanMoveOrMerge = true;
 							prevTile = null;
 						}
 						else
@@ -206,6 +224,7 @@ GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)	//Maybe
 			}
 		}
 	}
+	return tilesCanMoveOrMerge;
 }
 
 GridAnalyzer.prototype.print = function()

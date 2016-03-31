@@ -65,7 +65,8 @@ Game.prototype.runGame = function()
 Game.prototype.takeTurn = function(key)
 {
 	var direction = this.getDirectionFromInput(key);
-	this.gridAnalyzer.calculateMovedTilePositions(direction);
+	
+	this.tileManager.tilesMovedOrMerged = this.gridAnalyzer.calculateMovedAndMergedTilePositions(direction);
 	this.tileManager.animateTilesMoving(direction);
 }
 

@@ -123,7 +123,7 @@ Tile.prototype.animateGenesis = function()
 	element.css("width", 0 + "px");
 	element.css("top", 50 + "px");
 	element.css("left", 50 + "px");
-	element.animate({height: 106.25 + "px", width: 106.25 + "px", top: 0 + "px", left: 0 + "px"}, 150, $.proxy(this.afterAnimateGenesis, this))
+	element.animate({height: 106.25 + "px", width: 106.25 + "px", top: 0 + "px", left: 0 + "px"}, 100, $.proxy(this.afterAnimateGenesis, this))
 }
 
 Tile.prototype.afterAnimateGenesis = function()
