@@ -15,6 +15,7 @@ var Tile = function(cell, tileManager, value)
 	this.value = value || (parseInt(Math.random()*10) % 5 == 0) ? (4) : (2);
 
 	this.addToDOM();
+	this.animateGenesis();	//Might not be the best place for this
 }
 
 Tile.prototype.addToDOM = function()
@@ -78,25 +79,14 @@ Tile.prototype.getColor = function()
 	return "hsla(" + hue + "," + 75 + "%," + 35 + "%," + 1 + ")";
 }
 
-Tile.prototype.animate = function()
-{
-
-	if(this.generatedButNotAnimated)
-	{
-	//	this.animateGenesis();
-	}
-	else if(this.moveLeft > 0 || this.moveRight > 0 || this.moveUp > 0 || this.moveDown > 0)
-	{
-		this.animateMove();
-	}
-}
-
 Tile.prototype.animateGenesis = function()
 {
 	var element = this.getElement();
 	element.css("height", 0 + "px");
 	element.css("width", 0 + "px");
-	element.animate({height: 106.25 + "px", width: 106.25 + "px"}, 300, $.proxy(this.afterAnimateGenesis, this))
+	element.css("top", 50 + "px");
+	element.css("left", 50 + "px");
+	element.animate({height: 106.25 + "px", width: 106.25 + "px", top: 0 + "px", left: 0 + "px"}, 150, $.proxy(this.afterAnimateGenesis, this))
 }
 
 Tile.prototype.afterAnimateGenesis = function()
