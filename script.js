@@ -1,10 +1,14 @@
 var grid;
+var game;
 
 var LEFT = 37;
 var RIGHT = 39;
 var UP = 38;
 var DOWN = 40;
 var A = 65;
+
+var keyHandlingInProgress = false;
+var keysToBeHandled = [];
 
 $(document).ready(function()
 {
@@ -13,28 +17,10 @@ $(document).ready(function()
 
 	grid = new Grid(4, 4);
 
-	var game = new Game(grid);
+	game = new Game(grid);
 	game.automatedAlgorithm = $('textarea').val();
 
-	$('div#game-container').keydown(function(e) 	
-	{
-		e.stopPropagation();
-	
-		var key = e.keyCode;
-		if(isValidKey(key))	
-		{
-			var direction;
-			switch(key)
-			{
-				case A: 
-					game.setAutomated(!game.automated);
-					game.runGame();
-					break;
-				default: 
-					game.takeTurn(e.keyCode);
-			}
-		}
-	});
+	$('div#game-container').keydown(manageKeydowns);
 
 	$('button').click(function()
 	{
@@ -42,7 +28,56 @@ $(document).ready(function()
 	});
 });
 
-var isValidKey = function(keyCode)				//is this the right place for this?
+var manageKeydowns = function(e)
+{
+	if(e)
+		e.stopPropagation();
+console.log("key handling in progress: " + keyHandlingInProgress);
+	if(!keyHandlingInProgress)
+	{
+		var keyEvent;					//This is actually an event object, right? Make sure
+		if(keysToBeHandled.length > 0)
+		{
+			keyEvent = keysToBeHandled[0];
+			keysToBeHandled.shift();			//removes first element
+		}
+		else
+		{
+			if(e)
+				keyEvent = e;
+		}
+		if(keyEvent)
+			keydownHandler(keyEvent);
+	}
+	else
+	{
+		if(e)
+			keysToBeHandled.push(e);
+	}
+}
+
+var keydownHandler = function(e) 	
+{
+	keyHandlingInProgress = true;	
+
+	var key = e.keyCode;
+	
+	if(isValidKey(key))	
+	{
+		var direction;
+		switch(key)
+		{
+			case A: 
+				game.setAutomated(!game.automated);
+				game.runGame();
+				break;
+			default: 
+				game.takeTurn(e.keyCode);
+		}
+	}
+}
+
+var isValidKey = function(keyCode)
 {
 	var validKeys = [LEFT, RIGHT, UP, DOWN, A];
 	for(var i=0; i<validKeys.length; i++)

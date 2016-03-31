@@ -14,14 +14,14 @@ var Game = function(grid, automatedAlgorithm)
 	this.automated = false;
 	this.automatedGameSpeed = 10;		//Milliseconds per automated turn
 	
-	//Add tiles
-	this.tileManager.addTile(false);
-	this.tileManager.addTile(false);
-
 
 	//Render grid
 	this.grid.render();		//Might not even want this here, or maybe this is the only place it should be, because it just needs to render once, then never again, the only thing that will change is the tiles on top of the grid. 
 	//this.runGame();	
+
+	//Add tiles
+	this.tileManager.addTile();
+	this.tileManager.addTile();
 
 }
 
@@ -67,7 +67,7 @@ Game.prototype.takeTurn = function(key)
 {
 	var direction = this.getDirectionFromInput(key);
 	this.gridAnalyzer.calculateMovedTilePositions(direction);
-	this.tileManager.addTile(true);
+//	this.tileManager.addTile();
 	this.tileManager.animateTiles(direction);
 }
 

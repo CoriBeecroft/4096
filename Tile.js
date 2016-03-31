@@ -1,10 +1,9 @@
-var Tile = function(cell, genesisAnimated, value)
+var Tile = function(cell, value)
 {
 	this.cell = cell;
-	this.genesisAnimated = genesisAnimated;		//Needs a better name
 
 	this.hasMerged = false;
-	this.generatedButNotAnimated = true;
+	this.generatedButNotAnimated =false;// true;
 
 	this.moveLeft = 0;
 	this.moveRight = 0;
@@ -81,12 +80,11 @@ Tile.prototype.getColor = function()
 Tile.prototype.animate = function()
 {
 
-	if(this.generatedButNotAnimated && this.genesisAnimated)
+	if(this.generatedButNotAnimated)
 	{
-		this.animateGenesis();
+	//	this.animateGenesis();
 	}
-
-	if(this.moveLeft > 0 || this.moveRight > 0 || this.moveUp > 0 || this.moveDown > 0)
+	else if(this.moveLeft > 0 || this.moveRight > 0 || this.moveUp > 0 || this.moveDown > 0)
 	{
 		this.animateMove();
 	}
@@ -134,13 +132,16 @@ Tile.prototype.animateMove = function()
 		return;
 	}
 
-	this.getElement().animate(cssProperty, 300, $.proxy(this.afterAnimateMove, this));
+	this.getElement().animate(cssProperty, 1000, $.proxy(this.afterAnimateMove, this));
+
+	TileManager.tilesAnimating++;
 }
 
 Tile.prototype.afterAnimateMove = function()
 {
 	this.updatePosition();
-//	this.cell.grid.render();
+	this.cell.grid.render();
+	TileManager.tilesAnimating--;
 }
 
 Tile.prototype.updatePosition = function()
