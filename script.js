@@ -21,6 +21,10 @@ $(document).ready(function()
 	game.automatedAlgorithm = $('textarea').val();
 
 	$('div#game-container').keydown(manageKeydowns);
+	$('div#game-container').click(function()
+	{
+		$('div#game-container').focus();
+	});
 
 	$('button').click(function()
 	{
@@ -59,7 +63,7 @@ var keydownHandler = function(e)
 	keyHandlingInProgress = true;	
 
 	var key = e.keyCode;
-	
+
 	if(isValidKey(key))	
 	{
 		var direction;
@@ -69,9 +73,17 @@ var keydownHandler = function(e)
 				game.setAutomated(!game.automated);
 				game.runGame();
 				break;
-			default: 
+			case LEFT:
+			case RIGHT: 
+			case UP: 
+			case DOWN:
 				game.takeTurn(e.keyCode);
+				break;
 		}
+	}
+	else
+	{
+		keyHandlingInProgress = false;
 	}
 }
 

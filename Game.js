@@ -2,7 +2,6 @@ var Game = function(grid, automatedAlgorithm)
 {
 	
 	this.grid = grid;
-	this.valueGrid = new ValueGrid(this.grid);
 	this.gridAnalyzer = new GridAnalyzer(this.grid);
 	this.tileManager = new TileManager(this.grid, this.gridAnalyzer);
 
@@ -65,7 +64,7 @@ Game.prototype.runGame = function()
 Game.prototype.takeTurn = function(key)
 {
 	var direction = this.getDirectionFromInput(key);
-	
+
 	this.tileManager.tilesMovedOrMerged = this.gridAnalyzer.calculateMovedAndMergedTilePositions(direction);
 	this.tileManager.animateTilesMoving(direction);
 }
@@ -74,7 +73,7 @@ Game.prototype.takeTurn = function(key)
 Game.prototype.getDirectionFromInput = function(key)
 {
 	var direction;
-
+	
 	if(isValidKey(key))
 	{
 		switch(key)
@@ -95,16 +94,6 @@ Game.prototype.getDirectionFromInput = function(key)
 	}
 
 	return direction;
-}
-
-Game.prototype.makeMove = function(key)
-{
-//	var tileHasMoved = grid.moveTiles(direction);
-//	if(tileHasMoved)
-//	{
-//		grid.addNewTile();
-//	}
-	//setTimeout(grid.render(), 2000);				//This seems odd, shouldn't I be rendering the grid much more frequently? How is this working?
 }
 
 Game.prototype.makeAutomatedMove = function()
