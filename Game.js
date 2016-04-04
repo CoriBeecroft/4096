@@ -5,6 +5,8 @@ var Game = function(grid, automatedAlgorithm)
 	this.gridAnalyzer = new GridAnalyzer(this.grid);
 	this.tileManager = new TileManager(this, this.grid, this.gridAnalyzer);
 
+	this.animated = true;
+
 	this.automatedAlgorithm = automatedAlgorithm;
 	this.dead = false;
 	this.lastMove = "left"; 

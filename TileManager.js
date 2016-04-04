@@ -37,8 +37,14 @@ TileManager.prototype.addTile = function()			//Should be adds new tile in random
 TileManager.prototype.moveMergeTiles = function(direction)
 {
 	this.tilesMovedOrMerged = this.gridAnalyzer.calculateMovedAndMergedTilePositions(direction);
-	this.animateTilesMoving(direction);
-
+	if(this.game.animated)
+	{
+		this.animateTilesMoving(direction);
+	}
+	else
+	{
+		this.afterTilesAnimate(direction);
+	}
 	return this.tilesMovedOrMerged;
 }
 
