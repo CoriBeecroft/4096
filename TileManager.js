@@ -1,5 +1,6 @@
-var TileManager = function(grid, gridAnalyzer)
+var TileManager = function(game, grid, gridAnalyzer)
 {
+	this.game = game;
 	this.grid = grid;
 	this.gridAnalyzer = gridAnalyzer;
 
@@ -31,6 +32,14 @@ TileManager.prototype.addTile = function()			//Should be adds new tile in random
 	{
 		return -1;
 	}
+}
+
+TileManager.prototype.moveMergeTiles = function(direction)
+{
+	this.tilesMovedOrMerged = this.gridAnalyzer.calculateMovedAndMergedTilePositions(direction);
+	this.animateTilesMoving(direction);
+
+	return this.tilesMovedOrMerged;
 }
 
 TileManager.prototype.animateTilesMoving = function(direction)		//Give this a better name

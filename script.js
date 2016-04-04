@@ -21,10 +21,6 @@ $(document).ready(function()
 	game.automatedAlgorithm = $('textarea').val();
 
 	$('div#game-container').keydown(manageKeydowns);
-	$('div#game-container').click(function()
-	{
-		$('div#game-container').focus();
-	});
 
 	$('button').click(function()
 	{
@@ -71,7 +67,8 @@ var keydownHandler = function(e)
 		{
 			case A: 
 				game.setAutomated(!game.automated);
-				game.runGame();
+				keyHandlingInProgress = false;
+			//	game.runGame();
 				break;
 			case LEFT:
 			case RIGHT: 

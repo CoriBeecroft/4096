@@ -3,14 +3,19 @@ var GridAnalyzer = function(grid)		//Tbh, this class is probably not necessary, 
 	this.grid = grid;
 }
 
-GridAnalyzer.prototype.calculateMovedAndMergedTilePositions = function(direction)	//Maybe a better name for this
+GridAnalyzer.prototype.getNumFreeSpaces = function()
+{
+	return this.getNonEmptyCells().length;
+}
+
+GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)
 {
 	var tilesCanMoveOrMerge = false;
 
 	if(direction == 'left')
 	{
 		//Move
-		for(var i=0; i<this.grid.width; i++)//Still need to also check if they can merge. =)
+		for(var i=0; i<this.grid.width; i++)
 		{
 			for(var j=this.grid.height-1; j>=0; j--)
 			{
@@ -28,7 +33,80 @@ GridAnalyzer.prototype.calculateMovedAndMergedTilePositions = function(direction
 				}
 			}
 		}
+	}
+	else if(direction == 'right')
+	{
+		//Move
+		for(var i=0; i<this.grid.width; i++)
+		{
+			for(var j=0; j<this.grid.height; j++)
+			{
+				if(this.grid.cells[j][i].isEmpty())
+				{
+					for(var k=j; k>=0; k--)
+					{
+						if(!this.grid.cells[k][i].isEmpty())
+						{
+							this.grid.cells[k][i].tile.moveRight++;
+							tilesCanMoveOrMerge = true;
+						}
+					}
+				}
+			}
+		}
+	}
+	else if(direction == 'up')
+	{
+		//Move
+		for(var j=0; j<this.grid.height; j++)
+		{
+			for(var i=this.grid.width-1; i>=0; i--)
+			{
+				if(this.grid.cells[j][i].isEmpty())
+				{
+					for(var k=i; k<this.grid.width; k++)
+					{
+						if(!this.grid.cells[j][k].isEmpty())
+						{
+							this.grid.cells[j][k].tile.moveUp++;
+							tilesCanMoveOrMerge = true;
+						}
+					}
+				}
+			}
+		}
+	}
+	else if(direction == 'down')
+	{
+		//Move
+		for(var j=0; j<this.grid.height; j++)
+		{
+			for(var i=0; i<this.grid.width; i++)
+			{
+				if(this.grid.cells[j][i].isEmpty())
+				{
+					for(var k=i; k>=0; k--)
+					{
+						if(!this.grid.cells[j][k].isEmpty())
+						{
+							this.grid.cells[j][k].tile.moveDown++;
+							tilesCanMoveOrMerge = true;
+						}
+					}
+				}
+			}
+		}
+	}
 
+	return tilesCanMoveOrMerge;
+}
+
+GridAnalyzer.prototype.calculateMergedTilePositions = function(direction)
+{
+	var tilesCanMoveOrMerge = false;
+
+	if(direction == 'left')
+	{
 		//Merge
 		for(var i=0; i<this.grid.height; i++)
 		{
@@ -64,25 +142,6 @@ GridAnalyzer.prototype.calculateMovedAndMergedTilePositions = function(direction
 	}
 	else if(direction == 'right')
 	{
-		//Move
-		for(var i=0; i<this.grid.width; i++)
-		{
-			for(var j=0; j<this.grid.height; j++)
-			{
-				if(this.grid.cells[j][i].isEmpty())
-				{
-					for(var k=j; k>=0; k--)
-					{
-						if(!this.grid.cells[k][i].isEmpty())
-						{
-							this.grid.cells[k][i].tile.moveRight++;
-							tilesCanMoveOrMerge = true;
-						}
-					}
-				}
-			}
-		}
-
 		//Merge
 		for(var i=0; i<this.grid.height; i++)
 		{
@@ -118,25 +177,6 @@ GridAnalyzer.prototype.calculateMovedAndMergedTilePositions = function(direction
 	}
 	else if(direction == 'up')
 	{
-		//Move
-		for(var j=0; j<this.grid.height; j++)
-		{
-			for(var i=this.grid.width-1; i>=0; i--)
-			{
-				if(this.grid.cells[j][i].isEmpty())
-				{
-					for(var k=i; k<this.grid.width; k++)
-					{
-						if(!this.grid.cells[j][k].isEmpty())
-						{
-							this.grid.cells[j][k].tile.moveUp++;
-							tilesCanMoveOrMerge = true;
-						}
-					}
-				}
-			}
-		}
-
 		//Merge
 		for(var j=0; j<this.grid.width; j++)
 		{
@@ -172,25 +212,6 @@ GridAnalyzer.prototype.calculateMovedAndMergedTilePositions = function(direction
 	}
 	else if(direction == 'down')
 	{
-		//Move
-		for(var j=0; j<this.grid.height; j++)
-		{
-			for(var i=0; i<this.grid.width; i++)
-			{
-				if(this.grid.cells[j][i].isEmpty())
-				{
-					for(var k=i; k>=0; k--)
-					{
-						if(!this.grid.cells[j][k].isEmpty())
-						{
-							this.grid.cells[j][k].tile.moveDown++;
-							tilesCanMoveOrMerge = true;
-						}
-					}
-				}
-			}
-		}
-
 		//Merge
 		for(var j=0; j<this.grid.width; j++)
 		{
@@ -224,7 +245,15 @@ GridAnalyzer.prototype.calculateMovedAndMergedTilePositions = function(direction
 			}
 		}
 	}
+
 	return tilesCanMoveOrMerge;
+}
+
+GridAnalyzer.prototype.calculateMovedAndMergedTilePositions = function(direction)	//Maybe a better name for this
+{	
+	var tilesMoved = this.calculateMovedTilePositions(direction);
+	var tilesMerged = this.calculateMergedTilePositions(direction);
+	return  tilesMoved || tilesMerged;
 }
 
 GridAnalyzer.prototype.print = function()

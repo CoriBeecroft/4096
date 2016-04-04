@@ -3,7 +3,7 @@ var Game = function(grid, automatedAlgorithm)
 	
 	this.grid = grid;
 	this.gridAnalyzer = new GridAnalyzer(this.grid);
-	this.tileManager = new TileManager(this.grid, this.gridAnalyzer);
+	this.tileManager = new TileManager(this, this.grid, this.gridAnalyzer);
 
 	this.automatedAlgorithm = automatedAlgorithm;
 	this.dead = false;
@@ -11,6 +11,7 @@ var Game = function(grid, automatedAlgorithm)
 	this.turn = 0;
 	this.nonMovingStreak = 0;
 	this.automated = false;
+	this.automatedInterval;
 	this.automatedGameSpeed = 10;		//Milliseconds per automated turn
 	
 
@@ -25,55 +26,36 @@ var Game = function(grid, automatedAlgorithm)
 
 Game.prototype.setAutomated = function(automated)
 {
-	this.automated = automated;
-}
 
-Game.prototype.runGame = function()
-{
-	if(!this.automated)
+	//clearInterval(this.automatedInterval);
+	if(this.automated && !automated)
 	{
-	 	this.makeMove();
+		clearInterval(this.automatedInterval);
 	}
-	else
-	{
-		var timeout;
-		if(!this.dead)
-		{
-			timeout = setTimeout($.proxy(function()
-			{
-				if(this.automated)
-				{
-					this.makeAutomatedMove();	
-					grid.render();
 
-					if(!grid.canTilesMoveOrMerge())
-					{
-						this.dead = true;
-					}
-				}
-				this.runGame();						//There is probably a better way to do this. Seriously look into it, this is probably pretty inefficient
-			}, this), this.automatedGameSpeed);
-		}
-		else
+	this.automated = automated;
+
+	if(this.automated)
+	{
+		this.automatedInterval = setInterval($.proxy(function()
 		{
-			clearTimeout(timeout);				//Don't I need this somewhere else too? Am I running a bunch of threads when I keep toggling between automated and not? Consider this. 
-		}
+			this.makeAutomatedMove();
+			//shouldn't need to render the grid again, but if I do, it would be here, probably
+		}, this), this.automatedGameSpeed);
 	}
 }
 
 Game.prototype.takeTurn = function(key)
 {
 	var direction = this.getDirectionFromInput(key);
-
-	this.tileManager.tilesMovedOrMerged = this.gridAnalyzer.calculateMovedAndMergedTilePositions(direction);
-	this.tileManager.animateTilesMoving(direction);
+	this.tileManager.moveMergeTiles(direction);
 }
 
 
 Game.prototype.getDirectionFromInput = function(key)
 {
 	var direction;
-	
+
 	if(isValidKey(key))
 	{
 		switch(key)
@@ -98,11 +80,11 @@ Game.prototype.getDirectionFromInput = function(key)
 
 Game.prototype.makeAutomatedMove = function()
 {
-	eval(this.automatedAlgorithm);
+	//eval(this.automatedAlgorithm);
 
-/*	var direction;
+	var direction;
 
-	if(this.getNumFreeSpaces() > 1)
+	if(this.gridAnalyzer.getNumFreeSpaces() > 1)
 	{
 		if(!this.lastMove || this.lastMove === "left" || this.lastMove === "right" || this.lastMove === "up")
 		{
@@ -127,14 +109,13 @@ Game.prototype.makeAutomatedMove = function()
 	}
 	else 
 	{
-		console.log(this.valueGrid.canMoveInDirection("left"));
 		this.setAutomated(false);
 	}
 
-	var tileHasMoved = grid.moveTiles(direction);
+	var tileHasMoved = this.tileManager.moveMergeTiles(direction);		//might need to do error checking on direction
 	if(tileHasMoved)
 	{
-		grid.addNewTile();
+		//grid.addNewTile();
 		this.nonMovingStreak = 0;
 	}
 	else
@@ -142,6 +123,6 @@ Game.prototype.makeAutomatedMove = function()
 		this.nonMovingStreak++;
 	}
 
-	/*console.log(this.valueGrid.getHighestValue());*/
+	//console.log(this.valueGrid.getHighestValue());
 
 }
