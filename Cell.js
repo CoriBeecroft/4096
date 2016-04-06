@@ -6,6 +6,10 @@ var Cell = function(xPosition, yPosition, grid)
 	this.grid = grid;
 }
 
+Cell.cellWidth = 106.25;
+Cell.cellHeight = 106.25;
+Cell.cellMargin = 15;
+
 Cell.prototype.getHTML = function()
 {
 	var $html = $("<div class='cell' x = '" + this.xPosition +  "' y = '" + this.	yPosition + "'></div>");

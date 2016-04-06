@@ -7,11 +7,6 @@ var Grid = function()
 	this.init();
 }
 
-//Might be better to put these in cell, not sure
-Grid.cellWidth = 106.25;
-Grid.cellHeight = 106.25;
-Grid.cellMargin = 15;
-
 Grid.prototype.init = function()
 {
 	for(var j=0; j<this.height; j++)
@@ -27,7 +22,7 @@ Grid.prototype.init = function()
 
 Grid.prototype.render = function()
 {
-	var grid = $('div#grid').length > 0 ? $('div#grid') : $("<div id='grid'></div>");			//There might be a better way to do this bit. 
+	var grid = $('div#grid').length > 0 ? $('div#grid') : $("<div id='grid'></div>");
 	grid.empty();
 	$('div#game-container').append(grid);
 	

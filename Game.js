@@ -16,11 +16,6 @@ var Game = function(grid, automatedAlgorithm)
 	this.automatedInterval;
 	this.automatedGameSpeed = 10;		//Milliseconds per automated turn
 	
-
-	//Render grid
-	this.grid.render();		//Might not even want this here, or maybe this is the only place it should be, because it just needs to render once, then never again, the only thing that will change is the tiles on top of the grid. 
-	//this.runGame();	
-
 	//Add tiles
 	this.tileManager.addTile();
 	this.tileManager.addTile();
@@ -28,8 +23,6 @@ var Game = function(grid, automatedAlgorithm)
 
 Game.prototype.setAutomated = function(automated)
 {
-
-	//clearInterval(this.automatedInterval);
 	if(this.automated && !automated)
 	{
 		clearInterval(this.automatedInterval);
@@ -39,11 +32,15 @@ Game.prototype.setAutomated = function(automated)
 
 	if(this.automated)
 	{
+		this.animated = false;
 		this.automatedInterval = setInterval($.proxy(function()
 		{
 			this.makeAutomatedMove();
-			//shouldn't need to render the grid again, but if I do, it would be here, probably
 		}, this), this.automatedGameSpeed);
+	}
+	else
+	{
+		this.animated = true;
 	}
 }
 
@@ -52,7 +49,6 @@ Game.prototype.takeTurn = function(key)
 	var direction = this.getDirectionFromInput(key);
 	this.tileManager.moveMergeTiles(direction);
 }
-
 
 Game.prototype.getDirectionFromInput = function(key)
 {
@@ -82,9 +78,9 @@ Game.prototype.getDirectionFromInput = function(key)
 
 Game.prototype.makeAutomatedMove = function()
 {
-	//eval(this.automatedAlgorithm);
+	eval(this.automatedAlgorithm);
 
-	var direction;
+/*	var direction;
 
 	if(this.gridAnalyzer.getNumFreeSpaces() > 1)
 	{
@@ -117,14 +113,10 @@ Game.prototype.makeAutomatedMove = function()
 	var tileHasMoved = this.tileManager.moveMergeTiles(direction);		//might need to do error checking on direction
 	if(tileHasMoved)
 	{
-		//grid.addNewTile();
 		this.nonMovingStreak = 0;
 	}
 	else
 	{
 		this.nonMovingStreak++;
-	}
-
-	//console.log(this.valueGrid.getHighestValue());
-
+	}*/
 }

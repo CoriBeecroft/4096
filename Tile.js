@@ -1,4 +1,4 @@
-var Tile = function(cell, tileManager, value)
+var Tile = function(cell, tileManager, animatedGenesis, value)
 {
 	this.cell = cell;
 	this.tileManager = tileManager;
@@ -14,12 +14,15 @@ var Tile = function(cell, tileManager, value)
 	this.moveRight = 0;
 	this.moveUp = 0; 
 	this.moveDown = 0;
-	
-	//generate value 80% chance of beig 2, 20% chance of being 4
+
+	//generate value 80% chance of being 2, 20% chance of being 4
 	this.value = value || (parseInt(Math.random()*10) % 5 == 0) ? (4) : (2);
 
 	this.addToDOM();
-	this.animateGenesis();	//Might not be the best place for this
+	if(animatedGenesis)
+	{
+		this.animateGenesis();
+	}
 }
 
 Tile.prototype.addToDOM = function()
@@ -102,7 +105,7 @@ Tile.prototype.setMerge = function(tile, direction)
 
 Tile.prototype.executeMerge = function()
 {
-	if(!this.absorber || !this.hasMergeEngagement || !this.betrothed) //I mean, I think this is right, I don't think I want to merge the tiles if those values aren't present
+	if(!this.absorber || !this.hasMergeEngagement || !this.betrothed)
 	{
 		return;
 	}
@@ -113,7 +116,6 @@ Tile.prototype.executeMerge = function()
 	this.hasMergeEngagement = false;
 	this.absorber = false;
 	this.betrothed = null;
-
 }
 
 Tile.prototype.animateGenesis = function()
@@ -137,22 +139,22 @@ Tile.prototype.animateMove = function()
 
 	if(this.moveLeft > 0)
 	{
-		var moveDistancePixels = ((Grid.cellWidth + Grid.cellMargin) * this.moveLeft) * -1;
+		var moveDistancePixels = ((Cell.cellWidth + Cell.cellMargin) * this.moveLeft) * -1;
 		cssProperty = {left: "+=" + moveDistancePixels + "px"};
 	}
 	else if(this.moveRight > 0)
 	{
-		var moveDistancePixels = (Grid.cellWidth + Grid.cellMargin) * this.moveRight;
+		var moveDistancePixels = (Cell.cellWidth + Cell.cellMargin) * this.moveRight;
 		cssProperty = {left: "+=" + moveDistancePixels + "px"};
 	}
 	else if(this.moveUp > 0)
 	{
-		var moveDistancePixels = ((Grid.cellWidth + Grid.cellMargin) * this.moveUp) * -1;
+		var moveDistancePixels = ((Cell.cellHeight + Cell.cellMargin) * this.moveUp) * -1;
 		cssProperty = {top: "+=" + moveDistancePixels + "px"};
 	}
 	else if(this.moveDown > 0)
 	{
-		var moveDistancePixels = (Grid.cellWidth + Grid.cellMargin) * this.moveDown;
+		var moveDistancePixels = (Cell.cellHeight + Cell.cellMargin) * this.moveDown;
 		cssProperty = {top: "+=" + moveDistancePixels + "px"};
 	}	
 	else

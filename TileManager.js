@@ -15,7 +15,6 @@ var TileManager = function(game, grid, gridAnalyzer)
 TileManager.prototype.addTile = function()			//Should be adds new tile in random empty cell if no args, but if args, then adds specified tile to specified cell location
 {
 	var emptyCells = this.gridAnalyzer.getEmptyCells();
-	
 
 	if(emptyCells.length > 0)
 	{
@@ -24,7 +23,7 @@ TileManager.prototype.addTile = function()			//Should be adds new tile in random
 		var randomCell = emptyCells[randomIndex];	
 
 		//Add tile
-		var tile = new Tile(randomCell, this);
+		var tile = new Tile(randomCell, this, this.game.animated);
 		randomCell.addTile(tile);
 		return tile;
 	}
@@ -37,18 +36,20 @@ TileManager.prototype.addTile = function()			//Should be adds new tile in random
 TileManager.prototype.moveMergeTiles = function(direction)
 {
 	this.tilesMovedOrMerged = this.gridAnalyzer.calculateMovedAndMergedTilePositions(direction);
+	
 	if(this.game.animated)
 	{
 		this.animateTilesMoving(direction);
 	}
 	else
 	{
-		this.afterTilesAnimate(direction);
+		this.updateTiles(direction);
 	}
+	
 	return this.tilesMovedOrMerged;
 }
 
-TileManager.prototype.animateTilesMoving = function(direction)		//Give this a better name
+TileManager.prototype.animateTilesMoving = function(direction)
 {
 	var cells = this.gridAnalyzer.getNonEmptyCells();
 
@@ -57,24 +58,25 @@ TileManager.prototype.animateTilesMoving = function(direction)		//Give this a be
 		cells[i].tile.animateMove();
 	}
 
-	//set an interval
 	this.areTilesAnimating = setInterval($.proxy(function()
 	{
 		if(this.tilesAnimating == 0)
 		{
-			this.afterTilesAnimate(direction);
+			this.updateTiles(direction);
 		}
 	}, this, direction), 10);
 }
 
-//A function to be called after all the tiles have animated and their callbacks have been executed
-TileManager.prototype.afterTilesAnimate = function(direction)
+TileManager.prototype.updateTiles = function(direction)
 {
 	this.updateTilePositions(direction);
 	this.excuteTileMerges();
 	this.grid.render();
+
 	if(this.tilesMovedOrMerged)
+	{
 		this.addTile();
+	}
 
 	clearInterval(this.areTilesAnimating);
 	keyHandlingInProgress = false;

@@ -7,16 +7,60 @@ main
 {
 	margin: auto;
 	font-family: sans-serif;
-	width: 800px;
+	width: 600px;
 }
 
-h1
+header
 {
+	display: inline-block;
+	margin-left: 50px;
+	margin-right: 0px;
+	width: 500px;
+	margin-bottom: 10px;
+}
+
+header #title-container
+{
+	float: left;
+	/*position: absolute;
+	border: 1px solid red;*/
+}
+
+header h1
+{
+	
+	
 	margin-top: 0px;
-	margin-bottom: 15px;
-	font-size: 70px;
+	margin-bottom: 5px;
+	font-size: 80px;
 	font-weight: bold;
-	text-align: center;
+	text-align: left;
+}
+
+header p
+{
+	display: inline-block;
+	margin-top: 0px;
+	margin-right: 0px;
+}
+
+header #button-container
+{
+	float: right;
+	margin-left: 15px;
+	margin-top: 25px;
+}
+
+header button
+{
+	float: right;
+	clear: right;
+	margin: 5px;
+	height: 30px;
+	background-color: grey;
+	border: none;
+	outline: none;
+	border-radius: 3px;
 }
 
 div#game-container
@@ -32,6 +76,7 @@ div#grid
 	background-color: black;
 	border-radius: 5px;
 	margin: auto;
+	clear: both;
 }
 
 div.cell
@@ -61,30 +106,26 @@ div.tile
 
 section#automated-tools
 {
+	margin: auto;
 	margin-top: 65px;
-	visibility: hidden;
-	height: 0px;
 }
 
-h2
+section#automated-tools h2
 {
 	text-align: center;
-	height: 0px;
 }
 
-textarea
+section#automated-tools textarea
 {
 	height: 700px;
-	width: 800px;
+	width: 600px;
 	outline: none;
 	resize: none;
-	margin: 0px;
-	height: 0px;
+	 	
 }
 
-button
+section#automated-tools button
 {
 	float: right;
 	margin: 0px;
-	height: 0px;
 }

@@ -10,9 +10,21 @@ var A = 65;
 var keyHandlingInProgress = false;
 var keysToBeHandled = [];
 
+var header = function()
+{
+	var header = $('<header>');
+	header.append('<div id="title-container"></div>');
+	header.append('<div id="button-container"></div>');
+	header.children('div#title-container').append('<h1>4096</h1><p>Dis is what dis game is all aboot!</p>');
+	header.children('div#button-container').append('<button>New Game</button><button>Run Automated</button>');
+
+	return header;
+}
+
 $(document).ready(function()
 {
-	$('main').prepend("<h1>4096</h1><div id='game-container' tabindex='0'></div>");
+	$('main').prepend("<div id='game-container' tabindex='0'></div>");
+	$('main').prepend(header());
 	$('#game-container').focus();
 
 	grid = new Grid(4, 4);
@@ -68,7 +80,6 @@ var keydownHandler = function(e)
 			case A: 
 				game.setAutomated(!game.automated);
 				keyHandlingInProgress = false;
-			//	game.runGame();
 				break;
 			case LEFT:
 			case RIGHT: 

@@ -5,7 +5,7 @@ var GridAnalyzer = function(grid)		//Tbh, this class is probably not necessary, 
 
 GridAnalyzer.prototype.getNumFreeSpaces = function()
 {
-	return this.getNonEmptyCells().length;
+	return this.getEmptyCells().length;
 }
 
 GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)
@@ -249,7 +249,7 @@ GridAnalyzer.prototype.calculateMergedTilePositions = function(direction)
 	return tilesCanMoveOrMerge;
 }
 
-GridAnalyzer.prototype.calculateMovedAndMergedTilePositions = function(direction)	//Maybe a better name for this
+GridAnalyzer.prototype.calculateMovedAndMergedTilePositions = function(direction)
 {	
 	var tilesMoved = this.calculateMovedTilePositions(direction);
 	var tilesMerged = this.calculateMergedTilePositions(direction);
@@ -299,7 +299,7 @@ GridAnalyzer.prototype.getEmptyCells = function()
 	return emptyCells;
 }
 
-GridAnalyzer.prototype.getNonEmptyCells = function()	//probably a way to combine this and getEmptyCells, but I'll consider that later
+GridAnalyzer.prototype.getNonEmptyCells = function()
 {
 	var nonEmptyCells = [];
 
