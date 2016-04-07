@@ -5,7 +5,7 @@ var Game = function(grid, automatedAlgorithm)
 	this.gridAnalyzer = new GridAnalyzer(this.grid);
 	this.tileManager = new TileManager(this, this.grid, this.gridAnalyzer);
 
-	this.animated = true;
+	this.animated = false;
 
 	this.automatedAlgorithm = automatedAlgorithm;
 	this.dead = false;
@@ -119,4 +119,21 @@ Game.prototype.makeAutomatedMove = function()
 	{
 		this.nonMovingStreak++;
 	}*/
+}
+
+Game.prototype.handleDeath = function()
+{
+	console.log("Game over");
+	$('#grid').append('<div id="game-over"><p>Game over</p></div>');
+
+	//if automated, clear interval
+	if(this.automated)
+	{
+		this.setAutomated(false);
+	}
+}
+
+Game.prototype.handleWin = function()
+{
+
 }

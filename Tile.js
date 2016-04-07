@@ -92,6 +92,20 @@ Tile.prototype.canMerge = function(tile)
 	return !this.hasMergeEngagement && !tile.hasMergeEngagement && this.value === tile.value;
 }
 
+Tile.prototype.clearMovesAndMerges = function()
+{
+	//clear moves
+	this.moveLeft = 0;
+	this.moveRight = 0;
+	this.moveUp = 0;
+	this.moveDown = 0;
+
+	//clear merges
+	this.hasMergeEngagement = false;
+	this.absorber = false;
+	this.betrothed = null;
+}
+
 Tile.prototype.setMerge = function(tile, direction)
 {
 	this.hasMergeEngagement = true;

@@ -44,8 +44,9 @@ TileManager.prototype.moveMergeTiles = function(direction)
 	else
 	{
 		this.updateTiles(direction);
+		this.checkForDeath();
 	}
-	
+
 	return this.tilesMovedOrMerged;
 }
 
@@ -63,6 +64,7 @@ TileManager.prototype.animateTilesMoving = function(direction)
 		if(this.tilesAnimating == 0)
 		{
 			this.updateTiles(direction);
+			this.checkForDeath();
 		}
 	}, this, direction), 10);
 }
@@ -150,5 +152,14 @@ TileManager.prototype.updateTilePositions = function(direction)
 				}
 			}
 		}
+	}
+}
+
+TileManager.prototype.checkForDeath = function()
+{
+	//if dead
+	if(!this.gridAnalyzer.canMoveOrMerge())
+	{
+		this.game.handleDeath();
 	}
 }

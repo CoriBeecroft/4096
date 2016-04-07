@@ -3,14 +3,9 @@ var GridAnalyzer = function(grid)		//Tbh, this class is probably not necessary, 
 	this.grid = grid;
 }
 
-GridAnalyzer.prototype.getNumFreeSpaces = function()
-{
-	return this.getEmptyCells().length;
-}
-
 GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)
 {
-	var tilesCanMoveOrMerge = false;
+	var tilesCanMove = 0;
 
 	if(direction == 'left')
 	{
@@ -27,7 +22,7 @@ GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)
 						if(!this.grid.cells[k][i].isEmpty())
 						{
 							this.grid.cells[k][i].tile.moveLeft++;
-							tilesCanMoveOrMerge = true;
+							tilesCanMove++;
 						}
 					}
 				}
@@ -48,7 +43,7 @@ GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)
 						if(!this.grid.cells[k][i].isEmpty())
 						{
 							this.grid.cells[k][i].tile.moveRight++;
-							tilesCanMoveOrMerge = true;
+							tilesCanMove++;
 						}
 					}
 				}
@@ -69,7 +64,7 @@ GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)
 						if(!this.grid.cells[j][k].isEmpty())
 						{
 							this.grid.cells[j][k].tile.moveUp++;
-							tilesCanMoveOrMerge = true;
+							tilesCanMove++;
 						}
 					}
 				}
@@ -90,7 +85,7 @@ GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)
 						if(!this.grid.cells[j][k].isEmpty())
 						{
 							this.grid.cells[j][k].tile.moveDown++;
-							tilesCanMoveOrMerge = true;
+							tilesCanMove++;
 						}
 					}
 				}
@@ -98,12 +93,12 @@ GridAnalyzer.prototype.calculateMovedTilePositions = function(direction)
 		}
 	}
 
-	return tilesCanMoveOrMerge;
+	return tilesCanMove;
 }
 
 GridAnalyzer.prototype.calculateMergedTilePositions = function(direction)
 {
-	var tilesCanMoveOrMerge = false;
+	var tilesCanMerge = false;
 
 	if(direction == 'left')
 	{
@@ -123,7 +118,7 @@ GridAnalyzer.prototype.calculateMergedTilePositions = function(direction)
 						{
 							currentTile.setMerge(prevTile);						
 							numMerges++;
-							tilesCanMoveOrMerge = true;
+							tilesCanMerge = true;
 							prevTile = null;
 						}
 						else
@@ -158,7 +153,7 @@ GridAnalyzer.prototype.calculateMergedTilePositions = function(direction)
 						{
 							currentTile.setMerge(prevTile);						
 							numMerges++;
-							tilesCanMoveOrMerge = true;
+							tilesCanMerge = true;
 							prevTile = null;
 						}
 						else
@@ -193,7 +188,7 @@ GridAnalyzer.prototype.calculateMergedTilePositions = function(direction)
 						{
 							currentTile.setMerge(prevTile);						
 							numMerges++;
-							tilesCanMoveOrMerge = true;
+							tilesCanMerge = true;
 							prevTile = null;
 						}
 						else
@@ -228,7 +223,7 @@ GridAnalyzer.prototype.calculateMergedTilePositions = function(direction)
 						{
 							currentTile.setMerge(prevTile);						
 							numMerges++;
-							tilesCanMoveOrMerge = true;
+							tilesCanMerge = true;
 							prevTile = null;
 						}
 						else
@@ -246,7 +241,7 @@ GridAnalyzer.prototype.calculateMergedTilePositions = function(direction)
 		}
 	}
 
-	return tilesCanMoveOrMerge;
+	return tilesCanMerge;
 }
 
 GridAnalyzer.prototype.calculateMovedAndMergedTilePositions = function(direction)
@@ -315,4 +310,60 @@ GridAnalyzer.prototype.getNonEmptyCells = function()
 	}
 
 	return nonEmptyCells;
+}
+
+GridAnalyzer.prototype.getNumFreeSpaces = function()
+{
+	return this.getEmptyCells().length;
+}
+
+GridAnalyzer.prototype.numMoves = function(direction)
+{
+	var numMoves = this.calculateMovedTilePositions(direction);
+
+	this.clearMovesAndMerges();
+
+	return numMoves;
+}
+
+GridAnalyzer.prototype.numMerges = function(direction)
+{
+	var numMerges = this.calculateMergedTilePositions(direction);
+	
+	this.clearMovesAndMerges();
+	
+	return numMerges;
+}
+
+GridAnalyzer.prototype.canMove = function(direction)
+{
+	return this.numMoves(direction) > 0;
+}
+
+GridAnalyzer.prototype.canMerge = function(direction)
+{
+	return this.numMerges(direction) > 0;
+}
+
+GridAnalyzer.prototype.canMoveOrMerge = function(direction)
+{
+	if(direction)
+	{
+		return this.canMove(direction) || this.canMerge(direction);
+	}
+	else
+	{
+		return this.canMoveOrMerge('left') || this.canMoveOrMerge('right') || this.canMoveOrMerge('up') || this.canMoveOrMerge('down');
+	}
+}
+
+GridAnalyzer.prototype.clearMovesAndMerges = function()
+{
+	var nonEmptyCells = this.getNonEmptyCells();
+
+	for(var i=0; i<nonEmptyCells.length; i++)
+	{
+		var tile = nonEmptyCells[i].tile;
+		tile.clearMovesAndMerges();
+	}
 }
