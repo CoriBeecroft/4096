@@ -16,7 +16,7 @@ var header = function()
 	header.append('<div id="title-container"></div>');
 	header.append('<div id="button-container"></div>');
 	header.children('div#title-container').append('<h1>4096</h1><p>Dis is what dis game is all aboot!</p>');
-	header.children('div#button-container').append('<button>New Game</button><button>Run Automated</button>');
+	header.children('div#button-container').append('<button class="new-game">New Game</button><button>Run Automated</button>');
 
 	return header;
 }
@@ -33,6 +33,12 @@ $(document).ready(function()
 	game.automatedAlgorithm = $('textarea').val();
 
 	$('div#game-container').keydown(manageKeydowns);
+
+	$('button.new-game').click(function()
+	{
+		game.newGame();
+	});
+
 
 	$('button').click(function()
 	{

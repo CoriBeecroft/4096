@@ -8,7 +8,6 @@ var Game = function(grid, automatedAlgorithm)
 	this.animated = false;
 
 	this.automatedAlgorithm = automatedAlgorithm;
-	this.dead = false;
 	this.lastMove = "left"; 
 	this.turn = 0;
 	this.nonMovingStreak = 0;
@@ -20,6 +19,18 @@ var Game = function(grid, automatedAlgorithm)
 	this.tileManager.addTile();
 	this.tileManager.addTile();
 }
+
+Game.prototype.newGame = function()
+{
+	this.grid.clear(); 
+	this.turn = 0;
+	this.nonMovingStreak = 0;
+	this.automated = false;
+
+	this.tileManager.addTile();
+	this.tileManager.addTile();
+}
+
 
 Game.prototype.setAutomated = function(automated)
 {

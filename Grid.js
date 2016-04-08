@@ -39,3 +39,20 @@ Grid.prototype.getCell = function(xIndex, yIndex)
 {
 	return this.cells[xIndex][yIndex];
 }
+
+Grid.prototype.clear = function()
+{
+	for(var j=0; j<this.height; j++)
+	{
+		for(var i=0; i<this.width; i++)
+		{			
+			var cell = this.cells[i][j];
+			if(cell.tile)
+			{
+				cell.removeTile();
+			}
+		}
+	}
+
+	this.render();
+}
