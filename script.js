@@ -7,9 +7,6 @@ var UP = 38;
 var DOWN = 40;
 var A = 65;
 
-var keyHandlingInProgress = false;
-var keysToBeHandled = [];
-
 var header = function()
 {
 	var header = $('<header>');
@@ -32,7 +29,7 @@ $(document).ready(function()
 	game = new Game(grid);
 	game.automatedAlgorithm = $('textarea').val();
 
-	$('div#game-container').keydown(manageKeydowns);
+	$('div#game-container').keydown(keydownHandler);
 
 	$('button.new-game').click(function()
 	{
@@ -46,58 +43,32 @@ $(document).ready(function()
 	});
 });
 
-var manageKeydowns = function(e)
-{
-	if(!keyHandlingInProgress)
-	{
-		var keyEvent;
-		
-		if(keysToBeHandled.length > 0)
-		{
-			keyEvent = keysToBeHandled[0];
-			keysToBeHandled.shift();			//removes first element
-		}
-		else
-		{
-			keyEvent = e;
-		}
-		if(keyEvent)
-		{
-			keydownHandler(keyEvent);
-		}
-	}
-	else
-	{
-		keysToBeHandled.push(e);
-	}
-}
-
 var keydownHandler = function(e) 	
 {
-	keyHandlingInProgress = true;	
-
 	var key = e.keyCode;
 
 	if(isValidKey(key))	
 	{
-		var direction;
+		e.preventDefault();
+		e.stopPropagation();
 		switch(key)
 		{
 			case A: 
-				game.setAutomated(!game.automated);
-				keyHandlingInProgress = false;
+				game.handleInput('a');
 				break;
 			case LEFT:
+				game.handleInput('left');
+				break;
 			case RIGHT: 
+				game.handleInput('right');
+				break;
 			case UP: 
+				game.handleInput('up');
+				break;
 			case DOWN:
-				game.takeTurn(e.keyCode);
+				game.handleInput('down');
 				break;
 		}
-	}
-	else
-	{
-		keyHandlingInProgress = false;
 	}
 }
 

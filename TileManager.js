@@ -81,8 +81,8 @@ TileManager.prototype.updateTiles = function(direction)
 	}
 
 	clearInterval(this.areTilesAnimating);
-	keyHandlingInProgress = false;
-	manageKeydowns();
+	this.game.keyHandlingInProgress = false;
+	this.game.handleInput();
 }
 
 TileManager.prototype.excuteTileMerges = function()

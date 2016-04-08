@@ -5,7 +5,7 @@ var Game = function(grid, automatedAlgorithm)
 	this.gridAnalyzer = new GridAnalyzer(this.grid);
 	this.tileManager = new TileManager(this, this.grid, this.gridAnalyzer);
 
-	this.animated = false;
+	this.animated = true;
 
 	this.automatedAlgorithm = automatedAlgorithm;
 	this.lastMove = "left"; 
@@ -13,11 +13,49 @@ var Game = function(grid, automatedAlgorithm)
 	this.nonMovingStreak = 0;
 	this.automated = false;
 	this.automatedInterval;
-	this.automatedGameSpeed = 10;		//Milliseconds per automated turn
+	this.automatedGameSpeed = 300;		//Milliseconds per automated turn
 	
+	this.keyHandlingInProgress = false;
+	this.inputToBeHandled = [];
+
 	//Add tiles
 	this.tileManager.addTile();
 	this.tileManager.addTile();
+}
+
+Game.prototype.handleInput = function(input)
+{
+	if(!this.keyHandlingInProgress)
+	{
+		var keyEvent;
+		
+		if(this.inputToBeHandled.length > 0)
+		{
+			input = this.inputToBeHandled[0];
+			this.inputToBeHandled.shift();			//removes first element
+		}
+		else
+		{
+			keyEvent = input;
+		}
+		if(keyEvent)
+		{
+			if(input == 'a')
+			{
+				this.setAutomated(!this.automated);
+				this.keyHandlingInProgress = false;
+			}
+			else	//if input is a direction
+			{
+				console.log(input);
+				this.takeTurn(input);
+			}
+		}
+	}
+	else
+	{
+		this.inputToBeHandled.push(input);
+	}
 }
 
 Game.prototype.newGame = function()
@@ -26,6 +64,7 @@ Game.prototype.newGame = function()
 	this.turn = 0;
 	this.nonMovingStreak = 0;
 	this.automated = false;
+	clearInterval(this.automatedInterval);
 
 	this.tileManager.addTile();
 	this.tileManager.addTile();
@@ -43,7 +82,7 @@ Game.prototype.setAutomated = function(automated)
 
 	if(this.automated)
 	{
-		this.animated = false;
+		//this.animated = false;
 		this.automatedInterval = setInterval($.proxy(function()
 		{
 			this.makeAutomatedMove();
@@ -55,9 +94,9 @@ Game.prototype.setAutomated = function(automated)
 	}
 }
 
-Game.prototype.takeTurn = function(key)
+Game.prototype.takeTurn = function(direction)
 {
-	var direction = this.getDirectionFromInput(key);
+	this.keyHandlingInProgress = true;
 	this.tileManager.moveMergeTiles(direction);
 }
 
@@ -89,31 +128,27 @@ Game.prototype.getDirectionFromInput = function(key)
 
 Game.prototype.makeAutomatedMove = function()
 {
-	eval(this.automatedAlgorithm);
+//	eval(this.automatedAlgorithm);
 
-/*	var direction;
+	var direction;
 
 	if(this.gridAnalyzer.getNumFreeSpaces() > 1)
 	{
-		if(!this.lastMove || this.lastMove === "left" || this.lastMove === "right" || this.lastMove === "up")
+		if(this.gridAnalyzer.canMoveOrMerge('down'))
 		{
 			direction = "down";
-			this.lastMove = "down";
 		}
-		else if(this.nonMovingStreak > 5)
+		else if(this.gridAnalyzer.canMoveOrMerge('left'))
 		{
-			direction ="up";
-			this.lastMove = "up";
+			direction ="left";
 		}
-		else if(this.nonMovingStreak > 3)
+		else if(this.gridAnalyzer.canMoveOrMerge('right'))
 		{
 			direction ="right";
-			this.lastMove = "right";
 		}
 		else
 		{
-			direction = "left";
-			this.lastMove = "left";
+			direction = "up";
 		}
 	}
 	else 
@@ -121,7 +156,8 @@ Game.prototype.makeAutomatedMove = function()
 		this.setAutomated(false);
 	}
 
-	var tileHasMoved = this.tileManager.moveMergeTiles(direction);		//might need to do error checking on direction
+	var tileHasMoved = this.handleInput(direction);  //this.tileManager.moveMergeTiles(direction);		//might need to do error checking on direction	
+	
 	if(tileHasMoved)
 	{
 		this.nonMovingStreak = 0;
@@ -129,15 +165,13 @@ Game.prototype.makeAutomatedMove = function()
 	else
 	{
 		this.nonMovingStreak++;
-	}*/
+	}
 }
 
 Game.prototype.handleDeath = function()
 {
-	console.log("Game over");
 	$('#grid').append('<div id="game-over"><p>Game over</p></div>');
 
-	//if automated, clear interval
 	if(this.automated)
 	{
 		this.setAutomated(false);
