@@ -82,7 +82,7 @@ TileManager.prototype.updateTiles = function(direction)
 
 	clearInterval(this.areTilesAnimating);
 	this.game.keyHandlingInProgress = false;
-	this.game.handleInput();
+	this.game.queueMove();
 }
 
 TileManager.prototype.excuteTileMerges = function()

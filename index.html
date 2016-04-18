@@ -13,45 +13,23 @@
 			<section id="automated-tools">			<!-- Might be a better class name for this -->
 				<h2>Algorithm for Automated Gameplay</h2>
 			    <textarea>
-var direction;
-
-if(true)	//this.gridAnalyzer.getNumFreeSpaces() > 1)
+if(this.gridAnalyzer.canMoveOrMerge('down'))
 {
-	if(!this.lastMove || this.lastMove === "left" || 
-		this.lastMove === "right" || this.lastMove === "up")
-	{
-		direction = "down";
-		this.lastMove = "down";
-	}
-	else if(this.nonMovingStreak > 5)
-	{
-		direction ="up";
-		this.lastMove = "up";
-	}
-	else if(this.nonMovingStreak > 3)
-	{
-		direction ="right";
-		this.lastMove = "right";
-	}
-	else
-	{
-		direction = "left";
-		this.lastMove = "left";
-	}
+	this.queueMove('down');
+	this.queueMove('left');
 }
-else 
+else if(this.gridAnalyzer.canMoveOrMerge('left'))
 {
-	this.setAutomated(false);
+	this.queueMove('left');
 }
-
-var tileHasMoved = this.tileManager.moveMergeTiles(direction);
-if(tileHasMoved)
+else if(this.gridAnalyzer.canMoveOrMerge('right'))
 {
-	this.nonMovingStreak = 0;
+	this.queueMove('right');
 }
-else
+else if(this.gridAnalyzer.canMoveOrMerge('up'))
 {
-	this.nonMovingStreak++;
+	this.queueMove('up');
+	this.queueMove('down');
 }
       			</textarea>
       			<button>Submit</button>

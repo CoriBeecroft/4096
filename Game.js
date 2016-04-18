@@ -23,7 +23,7 @@ var Game = function(grid, automatedAlgorithm)
 	this.tileManager.addTile();
 }
 
-Game.prototype.handleInput = function(input)
+Game.prototype.queueMove = function(input)
 {
 	if(!this.keyHandlingInProgress)
 	{
@@ -47,7 +47,6 @@ Game.prototype.handleInput = function(input)
 			}
 			else	//if input is a direction
 			{
-				console.log(input);
 				this.takeTurn(input);
 			}
 		}
@@ -82,14 +81,23 @@ Game.prototype.setAutomated = function(automated)
 
 	if(this.automated)
 	{
+		$('button.toggle-automation').text("Stop Automation");	
 		//this.animated = false;
 		this.automatedInterval = setInterval($.proxy(function()
 		{
-			this.makeAutomatedMove();
+			if(this.gridAnalyzer.canMoveOrMerge())
+			{
+				this.makeAutomatedMove();
+			}
+			else
+			{
+				this.handleDeath();
+			}
 		}, this), this.automatedGameSpeed);
 	}
 	else
 	{
+		$('button.toggle-automation').text("Run Automation");
 		this.animated = true;
 	}
 }
@@ -128,49 +136,38 @@ Game.prototype.getDirectionFromInput = function(key)
 
 Game.prototype.makeAutomatedMove = function()
 {
-//	eval(this.automatedAlgorithm);
+	eval(this.automatedAlgorithm);
 
-	var direction;
-
-	if(this.gridAnalyzer.getNumFreeSpaces() > 1)
+/*	if(this.gridAnalyzer.canMoveOrMerge('down'))
 	{
-		if(this.gridAnalyzer.canMoveOrMerge('down'))
-		{
-			direction = "down";
-		}
-		else if(this.gridAnalyzer.canMoveOrMerge('left'))
-		{
-			direction ="left";
-		}
-		else if(this.gridAnalyzer.canMoveOrMerge('right'))
-		{
-			direction ="right";
-		}
-		else
-		{
-			direction = "up";
-		}
+		this.queueMove('down');
+		this.queueMove('left');
 	}
-	else 
+	else if(this.gridAnalyzer.canMoveOrMerge('left'))
 	{
-		this.setAutomated(false);
+		this.queueMove('left');
 	}
-
-	var tileHasMoved = this.handleInput(direction);  //this.tileManager.moveMergeTiles(direction);		//might need to do error checking on direction	
-	
-	if(tileHasMoved)
+	else if(this.gridAnalyzer.canMoveOrMerge('right'))
 	{
-		this.nonMovingStreak = 0;
+		this.queueMove('right');
 	}
-	else
+	else if(this.gridAnalyzer.canMoveOrMerge('up'))
 	{
-		this.nonMovingStreak++;
-	}
+		this.queueMove('up');
+		this.queueMove('down');
+	}*/
 }
 
 Game.prototype.handleDeath = function()
 {
-	$('#grid').append('<div id="game-over"><p>Game over</p></div>');
+	if($('#game-over').length ===0)
+	{
+		$('#grid').append('<div id="game-over"><p>Game over</p><div class="close">x</div></div>');
+		$('div.close').click(function()
+		{
+			$('div#game-over').remove();
+		});
+	}
 
 	if(this.automated)
 	{

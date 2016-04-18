@@ -12,8 +12,8 @@ var header = function()
 	var header = $('<header>');
 	header.append('<div id="title-container"></div>');
 	header.append('<div id="button-container"></div>');
-	header.children('div#title-container').append('<h1>4096</h1><p>Dis is what dis game is all aboot!</p>');
-	header.children('div#button-container').append('<button class="new-game">New Game</button><button>Run Automated</button>');
+	header.children('div#title-container').append('<h1>4096</h1><p>Use the arrow keys to move and merge the tiles to get the 4096 tile</p>');
+	header.children('div#button-container').append('<button class="new-game">New Game</button><button class="toggle-automation">Run Automation</button>');
 
 	return header;
 }
@@ -36,6 +36,10 @@ $(document).ready(function()
 		game.newGame();
 	});
 
+	$('button.toggle-automation').click(function()
+	{
+		game.setAutomated(!game.automated);
+	});
 
 	$('button').click(function()
 	{
@@ -54,19 +58,19 @@ var keydownHandler = function(e)
 		switch(key)
 		{
 			case A: 
-				game.handleInput('a');
+				game.queueMove('a');
 				break;
 			case LEFT:
-				game.handleInput('left');
+				game.queueMove('left');
 				break;
 			case RIGHT: 
-				game.handleInput('right');
+				game.queueMove('right');
 				break;
 			case UP: 
-				game.handleInput('up');
+				game.queueMove('up');
 				break;
 			case DOWN:
-				game.handleInput('down');
+				game.queueMove('down');
 				break;
 		}
 	}

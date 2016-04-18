@@ -1,6 +1,6 @@
 body
 {
-	background-color: #445566;
+	background-color: #556677;
 }
 
 main 
@@ -36,6 +36,7 @@ header h1
 header p
 {
 	display: inline-block;
+	max-width: 250px;
 	margin-top: 0px;
 	margin-right: 0px;
 }
@@ -113,7 +114,7 @@ section#automated-tools h2
 
 section#automated-tools textarea
 {
-	height: 700px;
+	height: 300px;
 	width: 600px;
 	outline: none;
 	resize: none; 	
@@ -146,4 +147,17 @@ div#game-over p
 	margin-top: 150px;
 	position: absolute;
 	background-color: hsla(200, 55%, 38%, 1);
+}
+
+div#game-over div.close
+{
+	position: absolute;
+	top: 151px;
+	left: 487px;
+	width: 10px;
+}
+
+div#game-over div.close:hover
+{
+	cursor: pointer;
 }
