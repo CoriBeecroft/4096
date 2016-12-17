@@ -1,6 +1,7 @@
 body
 {
-	background-color: #556677;
+	background-color: hsla(15,75%,95%,1);
+	color: #230000;
 }
 
 main 
@@ -26,6 +27,7 @@ header #title-container
 
 header h1
 {
+	color: hsla(15,75%, 65%,1);
 	margin-top: 0px;
 	margin-bottom: 5px;
 	font-size: 80px;
@@ -52,9 +54,13 @@ header button
 {
 	float: right;
 	clear: right;
+}
+
+button
+{
 	margin: 5px;
 	height: 30px;
-	background-color: grey;
+	background-color: grey;		/* hsla(0, 40%, 60%, 0.5);*/
 	border: none;
 	outline: none;
 	border-radius: 3px;
@@ -70,7 +76,7 @@ div#grid
 	position: relative;
 	height: 500px;
 	width: 500px;
-	background-color: black;
+	background-color: #230000;/*black;*/	/*hsla(5,35%,15%,1);*/
 	border-radius: 5px;
 	margin: auto;
 	clear: both;
@@ -79,7 +85,7 @@ div#grid
 div.cell
 {
 	border-radius: 5px;
-	background-color: grey;
+	background-color: hsla(0, 40%, 90%, 0.5);			/*	grey;*/
 	width: 106.25px;
 	height: 106.25px;
 	margin-left: 15px;
@@ -128,36 +134,30 @@ section#automated-tools button
 
 div#game-over
 {	
-	position: relative;
-	height: 500px;
-	width: 500px; 
+	position: absolute;
+	height: 100%;
+	width: 100%;
 	margin: 0px;
-	background-color: hsla(200, 55%, 38%, .5);
+	background-color: hsla(0, 40%, 90%, 0.7);
 }
 
-div#game-over p
+div#game-over div
 {
-	font-size: 85px;
+	font-size: 52px;
 	text-align: center;
+	font-weight: bold;
 	padding-top: 30px;
 	width: 100%;
 	height: 30%;
 	border-radius: 3px;
 	margin: 0px;
-	margin-top: 150px;
+	margin-top: 130px;
 	position: absolute;
-	background-color: hsla(200, 55%, 38%, 1);
 }
 
-div#game-over div.close
+div#game-over div button
 {
-	position: absolute;
-	top: 151px;
-	left: 487px;
-	width: 10px;
-}
-
-div#game-over div.close:hover
-{
-	cursor: pointer;
+	display: block;
+	margin: auto;
+	margin-top: 20px;
 }

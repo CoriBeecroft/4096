@@ -83,7 +83,7 @@ Tile.prototype.getColor = function()
 {
 	var hue = Math.log2(this.value) * 5;
 
-	return "hsla(" + hue + "," + 75 + "%," + 35 + "%," + 1 + ")";
+	return "hsla(" + hue + "," + 75 + "%," + 35 + "%," + 1 + ")";   //Could be hue 65, 35
 }
 
 Tile.prototype.canMerge = function(tile)

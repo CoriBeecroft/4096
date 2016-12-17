@@ -67,6 +67,8 @@ Game.prototype.newGame = function()
 
 	this.tileManager.addTile();
 	this.tileManager.addTile();
+
+	$('#game-container').focus();
 }
 
 
@@ -99,6 +101,7 @@ Game.prototype.setAutomated = function(automated)
 	{
 		$('button.toggle-automation').text("Run Automation");
 		this.animated = true;
+		$('#game-container').focus();
 	}
 }
 
@@ -138,7 +141,12 @@ Game.prototype.makeAutomatedMove = function()
 {
 	eval(this.automatedAlgorithm);
 
-/*	if(this.gridAnalyzer.canMoveOrMerge('down'))
+	/*if(this.gridAnalyzer.getNumFreeSpaces() < 2)
+	{
+		this.setAutomated(false);
+		//Probably should also clear the moves queue
+	}
+	else if(this.gridAnalyzer.canMoveOrMerge('down'))
 	{
 		this.queueMove('down');
 		this.queueMove('left');
@@ -162,11 +170,13 @@ Game.prototype.handleDeath = function()
 {
 	if($('#game-over').length ===0)
 	{
-		$('#grid').append('<div id="game-over"><p>Game over</p><div class="close">x</div></div>');
-		$('div.close').click(function()
+		$('#grid').append('<div id="game-over"><div>Game Over<button class="new-game">Play Again</button></div></div>');			/*'<div id="game-over"><p>Game Over</p><div class="close">&times;</div></div>'*/
+		$('button.new-game').click(function()
 		{
 			$('div#game-over').remove();
+			game.newGame();
 		});
+		$('#game-over .new-game').focus();
 	}
 
 	if(this.automated)
