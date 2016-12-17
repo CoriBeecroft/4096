@@ -6,6 +6,7 @@ var RIGHT = 39;
 var UP = 38;
 var DOWN = 40;
 var A = 65;
+var N = 78;
 
 var header = function()
 {
@@ -58,7 +59,10 @@ var keydownHandler = function(e)
 		switch(key)
 		{
 			case A: 
-				game.queueMove('a');
+				game.queueMove('a');	//ok, does it really make sense to be sending this into queueMove? Something needs to be changed here. 
+				break;
+			case N:
+				game.newGame();
 				break;
 			case LEFT:
 				game.queueMove('left');
@@ -72,13 +76,15 @@ var keydownHandler = function(e)
 			case DOWN:
 				game.queueMove('down');
 				break;
+			default: 
+				console.log("Invalid input");
 		}
 	}
 }
 
 var isValidKey = function(keyCode)
 {
-	var validKeys = [LEFT, RIGHT, UP, DOWN, A];
+	var validKeys = [LEFT, RIGHT, UP, DOWN, A, N];
 	for(var i=0; i<validKeys.length; i++)
 	{
 		if(keyCode == validKeys[i])
