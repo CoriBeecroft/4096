@@ -1,6 +1,7 @@
 var Game = function(grid, automatedAlgorithm)
 {
-	
+	this.developmentMode = true;
+
 	this.grid = grid;
 	this.gridAnalyzer = new GridAnalyzer(this.grid);
 	this.tileManager = new TileManager(this, this.grid, this.gridAnalyzer);
@@ -9,11 +10,10 @@ var Game = function(grid, automatedAlgorithm)
 
 	this.automatedAlgorithm = automatedAlgorithm;
 	this.lastMove = "left"; 
-	this.turn = 0;
-	this.nonMovingStreak = 0;
+	
 	this.automated = false;
 	this.automatedInterval;
-	this.automatedGameSpeed = 300;		//Milliseconds per automated turn
+	this.automatedGameSpeed = this.developmentMode ? 30 : 300;		//Milliseconds per automated turn
 	
 	this.keyHandlingInProgress = false;
 	this.inputToBeHandled = [];
@@ -60,8 +60,6 @@ Game.prototype.queueMove = function(input)
 Game.prototype.newGame = function()
 {
 	this.grid.clear(); 
-	this.turn = 0;
-	this.nonMovingStreak = 0;
 	this.automated = false;
 	clearInterval(this.automatedInterval);
 
@@ -84,7 +82,10 @@ Game.prototype.setAutomated = function(automated)
 	if(this.automated)
 	{
 		$('button.toggle-automation').text("Stop Automation");	
-		//this.animated = false;
+		if(this.automatedGameSpeed < 300)
+		{
+			this.animated = false;
+		}
 		this.automatedInterval = setInterval($.proxy(function()
 		{
 			if(this.gridAnalyzer.canMoveOrMerge())
@@ -139,31 +140,36 @@ Game.prototype.getDirectionFromInput = function(key)
 
 Game.prototype.makeAutomatedMove = function()
 {
-	eval(this.automatedAlgorithm);
-
-	/*if(this.gridAnalyzer.getNumFreeSpaces() < 2)
+	if(this.developmentMode)
 	{
-		this.setAutomated(false);
-		//Probably should also clear the moves queue
+		if(this.gridAnalyzer.getNumFreeSpaces() < 2)
+		{
+			this.setAutomated(false);
+			//Probably should also clear the moves queue
+		}
+		else if(this.gridAnalyzer.canMoveOrMerge('down'))
+		{
+			this.queueMove('down');
+			this.queueMove('left');
+		}
+		else if(this.gridAnalyzer.canMoveOrMerge('left'))
+		{
+			this.queueMove('left');
+		}
+		else if(this.gridAnalyzer.canMoveOrMerge('right'))
+		{
+			this.queueMove('right');
+		}
+		else if(this.gridAnalyzer.canMoveOrMerge('up'))
+		{
+			this.queueMove('up');
+			this.queueMove('down');
+		}
 	}
-	else if(this.gridAnalyzer.canMoveOrMerge('down'))
+	else
 	{
-		this.queueMove('down');
-		this.queueMove('left');
+		eval(this.automatedAlgorithm);
 	}
-	else if(this.gridAnalyzer.canMoveOrMerge('left'))
-	{
-		this.queueMove('left');
-	}
-	else if(this.gridAnalyzer.canMoveOrMerge('right'))
-	{
-		this.queueMove('right');
-	}
-	else if(this.gridAnalyzer.canMoveOrMerge('up'))
-	{
-		this.queueMove('up');
-		this.queueMove('down');
-	}*/
 }
 
 Game.prototype.handleDeath = function()
