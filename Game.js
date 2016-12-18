@@ -174,21 +174,16 @@ Game.prototype.makeAutomatedMove = function()
 
 Game.prototype.handleDeath = function()
 {
-	if($('#game-over').length ===0)
-	{
-		$('#grid').append('<div id="game-over"><div>Game Over<button class="new-game">Play Again</button></div></div>');			/*'<div id="game-over"><p>Game Over</p><div class="close">&times;</div></div>'*/
-		$('button.new-game').click(function()
-		{
-			$('div#game-over').remove();
-			game.newGame();
-		});
-		$('#game-over .new-game').focus();
-	}
-
 	if(this.automated)
 	{
 		this.setAutomated(false);
 	}
+
+	$('#game-over').css('visibility', 'visible');
+
+	$('#game-over').animate({"opacity": "1"}, 300);
+
+	$('#game-over .new-game').focus();
 }
 
 Game.prototype.handleWin = function()

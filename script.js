@@ -23,17 +23,21 @@ $(document).ready(function()
 {
 	$('main').prepend("<div id='game-container' tabindex='0'></div>");
 	$('main').prepend(header());
+	$('#game-container').append('<div id="game-over"><div>Game Over!<button class="new-game">Play Again</button></div></div>');
 	$('#game-container').focus();
+
 
 	grid = new Grid(4, 4);
 
 	game = new Game(grid);
 	game.automatedAlgorithm = $('textarea').val();
-
+	
 	$('div#game-container').keydown(keydownHandler);
 
 	$('button.new-game').click(function()
 	{
+		$('div#game-over').css('visibility', 'hidden');
+		$('#game-over').css('opacity', '0');
 		game.newGame();
 	});
 
@@ -42,7 +46,7 @@ $(document).ready(function()
 		game.setAutomated(!game.automated);
 	});
 
-	$('button').click(function()
+	$('button').click(function()		//This needs to be fixed, this should only be on the submit button...
 	{
 		game.automatedAlgorithm = $('textarea').val();
 	});
