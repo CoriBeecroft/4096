@@ -8,6 +8,8 @@ var TileManager = function(game, grid, gridAnalyzer)
 	this.tilesAnimating = 0;
 
 	this.tilesMovedOrMerged = false;
+
+	this.highestTile = 0;
 }
 
 //Add new tile to random empty cell in grid
@@ -25,6 +27,13 @@ TileManager.prototype.addTile = function()			//Should be adds new tile in random
 		//Add tile
 		var tile = new Tile(randomCell, this, this.game.animated);
 		randomCell.addTile(tile);
+
+		//Set initial highest tile
+		if(this.highestTile < 4)
+		{
+			this.highestTile = (this.highestTile < tile.value) ? tile.value : this.highestTile;
+		}
+
 		return tile;
 	}
 	else //return error
@@ -83,6 +92,12 @@ TileManager.prototype.updateTiles = function(direction)
 	clearInterval(this.areTilesAnimating);
 	this.game.keyHandlingInProgress = false;
 	this.game.queueMove();
+	
+	//Check for win (this should probably be somewhere else, but it makes sense here right now because I'm sure the tiles will have finished updating and whatnot by this point)
+	if(this.highestTile === this.game.winValue && !this.game.winHasBeenCommunicated)
+	{
+		this.game.handleWin();
+	}
 }
 
 TileManager.prototype.excuteTileMerges = function()

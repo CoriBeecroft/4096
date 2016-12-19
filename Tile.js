@@ -126,6 +126,9 @@ Tile.prototype.executeMerge = function()
 
 	this.value *= 2;
 	
+	//check for highest tile	
+	this.tileManager.highestTile = (this.value > this.tileManager.highestTile) ? this.value : this.tileManager.highestTile;
+
 	//reset merge values
 	this.hasMergeEngagement = false;
 	this.absorber = false;

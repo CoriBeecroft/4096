@@ -24,6 +24,7 @@ $(document).ready(function()
 	$('main').prepend("<div id='game-container' tabindex='0'></div>");
 	$('main').prepend(header());
 	$('#game-container').append('<div id="game-over"><div>Game Over!<button class="new-game">Play Again</button></div></div>');
+	$('#game-container').append('<div id="win-screen"><div>You win!<button class="keep-playing">Keep Playing</button></div></div>');
 	$('#game-container').focus();
 
 
@@ -39,6 +40,14 @@ $(document).ready(function()
 		$('div#game-over').css('visibility', 'hidden');
 		$('#game-over').css('opacity', '0');
 		game.newGame();
+	});
+
+	$('button.keep-playing').click(function()
+	{
+		$('div#win-screen').css('visibility', 'hidden');
+		$('#win-screen').css('opacity', '0');
+		game.movementEnabled = true;
+		$('#game-container').focus();
 	});
 
 	$('button.toggle-automation').click(function()

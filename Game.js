@@ -2,6 +2,9 @@ var Game = function(grid, automatedAlgorithm)
 {
 	this.developmentMode = true;
 
+	this.winValue = 4096;
+	this.winHasBeenCommunicated = false;
+
 	this.grid = grid;
 	this.gridAnalyzer = new GridAnalyzer(this.grid);
 	this.tileManager = new TileManager(this, this.grid, this.gridAnalyzer);
@@ -17,6 +20,7 @@ var Game = function(grid, automatedAlgorithm)
 	
 	this.keyHandlingInProgress = false;
 	this.inputToBeHandled = [];
+	this.movementEnabled = true;
 
 	//Add tiles
 	this.tileManager.addTile();
@@ -25,35 +29,39 @@ var Game = function(grid, automatedAlgorithm)
 
 Game.prototype.queueMove = function(input)
 {
-	if(!this.keyHandlingInProgress)
+	console.log(this.movementEnabled);
+	if(this.movementEnabled)
 	{
-		var keyEvent;
-		
-		if(this.inputToBeHandled.length > 0)
+		if(!this.keyHandlingInProgress)
 		{
-			input = this.inputToBeHandled[0];
-			this.inputToBeHandled.shift();			//removes first element
+			var keyEvent;
+			
+			if(this.inputToBeHandled.length > 0)
+			{
+				input = this.inputToBeHandled[0];
+				this.inputToBeHandled.shift();			//removes first element
+			}
+			else
+			{
+				keyEvent = input;
+			}
+			if(keyEvent)
+			{
+				if(input == 'a')	//This really doesn't make sense here, it's completely out of place, FIX THIS!
+				{
+					this.setAutomated(!this.automated);
+					this.keyHandlingInProgress = false;
+				}
+				else	//if input is a direction
+				{
+					this.takeTurn(input);
+				}
+			}
 		}
 		else
 		{
-			keyEvent = input;
+			this.inputToBeHandled.push(input);
 		}
-		if(keyEvent)
-		{
-			if(input == 'a')
-			{
-				this.setAutomated(!this.automated);
-				this.keyHandlingInProgress = false;
-			}
-			else	//if input is a direction
-			{
-				this.takeTurn(input);
-			}
-		}
-	}
-	else
-	{
-		this.inputToBeHandled.push(input);
 	}
 }
 
@@ -62,6 +70,11 @@ Game.prototype.newGame = function()
 	this.grid.clear(); 
 	this.automated = false;
 	clearInterval(this.automatedInterval);
+	this.winHasBeenCommunicated = false;
+	this.tileManager.highestTile = 0;
+	$('div#game-over').css('visibility', 'hidden');
+	$('div#win-screen').css('visibility', 'hidden');
+
 
 	this.tileManager.addTile();
 	this.tileManager.addTile();
@@ -188,5 +201,19 @@ Game.prototype.handleDeath = function()
 
 Game.prototype.handleWin = function()
 {
+	if(this.automated)
+	{
+		this.setAutomated(false);
+	}
 
+	//disable movement 
+	this.movementEnabled = false;
+
+	$('#win-screen').css('visibility', 'visible');
+
+	$('#win-screen').animate({"opacity": "1"}, 300);
+
+	$('#win-screen .keep-playing').focus();
+	
+	this.winHasBeenCommunicated = true;
 }
