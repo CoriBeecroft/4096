@@ -8,31 +8,18 @@ var DOWN = 40;
 var A = 65;
 var N = 78;
 
-var header = function()
-{
-	var header = $('<header>');
-	header.append('<div id="title-container"></div>');
-	header.append('<div id="button-container"></div>');
-	header.children('div#title-container').append('<h1>4096</h1><p>Use the arrow keys to move and merge the tiles to get the 4096 tile</p>');
-	header.children('div#button-container').append('<button class="new-game">New Game</button><button class="toggle-automation">Run Automation</button>');
-
-	return header;
-}
-
 $(document).ready(function()
 {
-	$('main').prepend("<div id='game-container' tabindex='0'></div>");
-	$('main').prepend(header());
-	$('#game-container').append('<div id="game-over"><div>Game Over!<button class="new-game">Play Again</button></div></div>');
-	$('#game-container').append('<div id="win-screen"><div>You win!<button class="keep-playing">Keep Playing</button></div></div>');
 	$('#game-container').focus();
-
 
 	grid = new Grid(4, 4);
 
 	game = new Game(grid);
 	game.automatedAlgorithm = $('textarea').val();
 	
+	//
+	//	Attach input handlers
+	//
 	$('div#game-container').keydown(keydownHandler);
 
 	$('button.new-game').click(function()
@@ -46,18 +33,13 @@ $(document).ready(function()
 	{
 		$('div#win-screen').css('visibility', 'hidden');
 		$('#win-screen').css('opacity', '0');
-		game.movementEnabled = true;
 		$('#game-container').focus();
+		game.movementEnabled = true;
 	});
 
 	$('button.toggle-automation').click(function()
 	{
 		game.setAutomated(!game.automated);
-	});
-
-	$('button').click(function()		//This needs to be fixed, this should only be on the submit button...
-	{
-		game.automatedAlgorithm = $('textarea').val();
 	});
 });
 
@@ -72,7 +54,7 @@ var keydownHandler = function(e)
 		switch(key)
 		{
 			case A: 
-				game.queueMove('a');	//ok, does it really make sense to be sending this into queueMove? Something needs to be changed here. 
+				game.setAutomated(!game.automated);
 				break;
 			case N:
 				game.newGame();

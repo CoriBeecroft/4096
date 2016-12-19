@@ -1,6 +1,6 @@
 var Game = function(grid, automatedAlgorithm)
 {
-	this.developmentMode = true;
+	this.developmentMode = false;
 
 	this.winValue = 4096;
 	this.winHasBeenCommunicated = false;
@@ -19,7 +19,7 @@ var Game = function(grid, automatedAlgorithm)
 	this.automatedGameSpeed = this.developmentMode ? 30 : 300;		//Milliseconds per automated turn
 	
 	this.keyHandlingInProgress = false;
-	this.inputToBeHandled = [];
+	this.movesQueue = [];
 	this.movementEnabled = true;
 
 	//Add tiles
@@ -29,17 +29,16 @@ var Game = function(grid, automatedAlgorithm)
 
 Game.prototype.queueMove = function(input)
 {
-	console.log(this.movementEnabled);
 	if(this.movementEnabled)
 	{
 		if(!this.keyHandlingInProgress)
 		{
 			var keyEvent;
 			
-			if(this.inputToBeHandled.length > 0)
+			if(this.movesQueue.length > 0)
 			{
-				input = this.inputToBeHandled[0];
-				this.inputToBeHandled.shift();			//removes first element
+
+				input = this.movesQueue.shift();			//returns and removes first element
 			}
 			else
 			{
@@ -47,20 +46,12 @@ Game.prototype.queueMove = function(input)
 			}
 			if(keyEvent)
 			{
-				if(input == 'a')	//This really doesn't make sense here, it's completely out of place, FIX THIS!
-				{
-					this.setAutomated(!this.automated);
-					this.keyHandlingInProgress = false;
-				}
-				else	//if input is a direction
-				{
-					this.takeTurn(input);
-				}
+				this.takeTurn(input);
 			}
 		}
 		else
 		{
-			this.inputToBeHandled.push(input);
+			this.movesQueue.push(input);
 		}
 	}
 }
@@ -94,11 +85,14 @@ Game.prototype.setAutomated = function(automated)
 
 	if(this.automated)
 	{
+		this.automatedAlgorithm = $('textarea').val();
 		$('button.toggle-automation').text("Stop Automation");	
-		if(this.automatedGameSpeed < 300)
+
+		if(this.automatedGameSpeed < 200)
 		{
 			this.animated = false;
 		}
+
 		this.automatedInterval = setInterval($.proxy(function()
 		{
 			if(this.gridAnalyzer.canMoveOrMerge())
@@ -123,32 +117,6 @@ Game.prototype.takeTurn = function(direction)
 {
 	this.keyHandlingInProgress = true;
 	this.tileManager.moveMergeTiles(direction);
-}
-
-Game.prototype.getDirectionFromInput = function(key)
-{
-	var direction;
-
-	if(isValidKey(key))
-	{
-		switch(key)
-		{
-			case LEFT: 
-				direction = "left";
-				break;
-			case RIGHT: 
-				direction = "right";
-				break;
-			case UP:
-				direction = "up";
-				break;
-			case DOWN:
-				direction = "down";
-				break;
-		}
-	}
-
-	return direction;
 }
 
 Game.prototype.makeAutomatedMove = function()

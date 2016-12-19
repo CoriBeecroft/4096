@@ -8,9 +8,23 @@
 		<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 	</head>
 	<body>
-
 		<main>
-			<section id="automated-tools">			<!-- Might be a better class name for this -->
+			<header>
+				<div id="title-container">
+					<h1>4096</h1>
+					<p>Use the arrow keys to move and merge the tiles to get the 4096 tile</p>
+				</div>
+				<div id="button-container">
+					<button class="new-game">New Game</button><button class="toggle-automation">Run Automation</button>
+				</div>
+			</header>
+			
+			<div id='game-container' tabindex='0'>
+				<div id="game-over"><div>Game Over!<button class="new-game">Play Again</button></div></div>
+				<div id="win-screen"><div>You win!<button class="keep-playing">Keep Playing</button></div></div>
+			</div>
+
+			<section id="automated-tools">
 				<h2>Algorithm for Automated Gameplay</h2>
 			    <textarea>
 if(this.gridAnalyzer.canMoveOrMerge('down'))
@@ -32,11 +46,10 @@ else if(this.gridAnalyzer.canMoveOrMerge('up'))
 	this.queueMove('down');
 }
       			</textarea>
-      			<button>Submit</button>
 			</section>
 		<footer>
 			<hr>
-			4096 was made by <a href="http://coribeecroft.com" target="_blank">Cori Beecroft</a> and inspired by <a href="https://gabrielecirulli.github.io/2048/" target="_blank">2048</a>
+			4096 was made by <a href="http://coribeecroft.com" target="_blank">Cori Beecroft</a> and inspired by <a href="https://gabrielecirulli.github.io/2048/" target="_blank">2048</a>.
 		</footer>
 		</main>
 		<script type="text/javascript" src="Cell.js"></script>

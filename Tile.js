@@ -62,7 +62,6 @@ Tile.prototype.getFontSize = function()
 	var length = valueString.length;
 	var size;
 
-	//Might eventually need more cases(including potentially a truncate), but this is good for now
 	if(length < 5)
 	{
 		size = parseInt(100 - (length-1)*25);
@@ -83,7 +82,7 @@ Tile.prototype.getColor = function()
 {
 	var hue = Math.log2(this.value) * 5;
 
-	return "hsla(" + hue + "," + 75 + "%," + 35 + "%," + 1 + ")";   //Could be hue 65, 35
+	return "hsla(" + hue + "," + 75 + "%," + 35 + "%," + 1 + ")";
 }
 
 Tile.prototype.canMerge = function(tile)

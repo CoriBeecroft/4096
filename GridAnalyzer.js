@@ -1,4 +1,4 @@
-var GridAnalyzer = function(grid)		//Tbh, this class is probably not necessary, but it has such a cool name!! I am going to allow it to stay for now, but it will probably just end up being merged with grid
+var GridAnalyzer = function(grid)
 {
 	this.grid = grid;
 }
@@ -105,7 +105,7 @@ GridAnalyzer.prototype.calculateMergedTilePositions = function(direction)
 		//Merge
 		for(var i=0; i<this.grid.height; i++)
 		{
-			var prevTile = null;				//Needs a better name
+			var prevTile = null;
 			var numMerges = 0;
 			for(var j=0; j<this.grid.width; j++)
 			{
@@ -140,7 +140,7 @@ GridAnalyzer.prototype.calculateMergedTilePositions = function(direction)
 		//Merge
 		for(var i=0; i<this.grid.height; i++)
 		{
-			var prevTile = null;				//Needs a better name
+			var prevTile = null;
 			var numMerges = 0;
 			for(var j=this.grid.width-1; j>=0; j--)
 			{
@@ -175,7 +175,7 @@ GridAnalyzer.prototype.calculateMergedTilePositions = function(direction)
 		//Merge
 		for(var j=0; j<this.grid.width; j++)
 		{
-			var prevTile = null;				//Needs a better name
+			var prevTile = null;
 			var numMerges = 0;
 			for(var i=0; i<this.grid.height; i++)
 			{
@@ -210,7 +210,7 @@ GridAnalyzer.prototype.calculateMergedTilePositions = function(direction)
 		//Merge
 		for(var j=0; j<this.grid.width; j++)
 		{
-			var prevTile = null;				//Needs a better name
+			var prevTile = null;
 			var numMerges = 0;
 			for(var i=this.grid.height-1; i>=0; i--)
 			{
