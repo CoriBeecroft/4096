@@ -128,23 +128,23 @@ Game.prototype.makeAutomatedMove = function()
 			this.setAutomated(false);
 			//Probably should also clear the moves queue
 		}
-		else if(this.gridAnalyzer.canMoveOrMerge('down'))
+		else if(canMove('down'))
 		{
-			this.queueMove('down');
-			this.queueMove('left');
+			move('down');
+			move('left');
 		}
-		else if(this.gridAnalyzer.canMoveOrMerge('left'))
+		else if(canMove('left'))
 		{
-			this.queueMove('left');
+			move('left');
 		}
-		else if(this.gridAnalyzer.canMoveOrMerge('right'))
+		else if(canMove('right'))
 		{
-			this.queueMove('right');
+			move('right');
 		}
-		else if(this.gridAnalyzer.canMoveOrMerge('up'))
+		else if(canMove('up'))
 		{
-			this.queueMove('up');
-			this.queueMove('down');
+			move('up');
+			move('down');
 		}
 	}
 	else
@@ -152,6 +152,17 @@ Game.prototype.makeAutomatedMove = function()
 		eval(this.automatedAlgorithm);
 	}
 }
+
+var move = function(direction)
+{
+	game.queueMove(direction);
+}
+
+var canMove = function(direction)
+{
+	return game.gridAnalyzer.canMoveOrMerge(direction);
+}
+
 
 Game.prototype.handleDeath = function()
 {
