@@ -129,6 +129,11 @@ section#automated-tools textarea
 	resize: none; 	
 }
 
+section#automated-tools button
+{
+	float: right;
+}
+
 div#game-over
 {	
 	opacity: 0;

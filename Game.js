@@ -1,6 +1,6 @@
 var Game = function(grid, automatedAlgorithm)
 {
-	this.developmentMode = false;
+	this.developmentMode = true;
 
 	this.winValue = 4096;
 	this.winHasBeenCommunicated = false;
