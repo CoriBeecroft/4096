@@ -121,12 +121,12 @@ section#automated-tools h2
 	text-align: center;
 }
 
-section#automated-tools textarea
+section#automated-tools #editor
 {
-	height: 300px;
+	height: 350px;
 	width: 600px;
 	outline: none;
-	resize: none; 	
+	/*resize: none; */	
 }
 
 section#automated-tools button

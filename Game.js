@@ -1,6 +1,6 @@
 var Game = function(grid, automatedAlgorithm)
 {
-	this.developmentMode = true;
+	this.developmentMode = false;
 
 	this.winValue = 4096;
 	this.winHasBeenCommunicated = false;
@@ -85,7 +85,7 @@ Game.prototype.setAutomated = function(automated)
 
 	if(this.automated)
 	{
-		this.automatedAlgorithm = $('textarea').val();
+		this.automatedAlgorithm = editor.getValue();
 		$('button.toggle-automation').text("Stop Automation");	
 
 		if(this.automatedGameSpeed < 200)

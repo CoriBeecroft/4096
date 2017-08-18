@@ -15,7 +15,8 @@ $(document).ready(function()
 	grid = new Grid(4, 4);
 
 	game = new Game(grid);
-	game.automatedAlgorithm = $('textarea').val();
+	game.automatedAlgorithm = editor.getValue();
+	console.log(editor.getValue());
 	
 	//
 	//	Attach input handlers
