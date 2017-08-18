@@ -73,7 +73,6 @@ Game.prototype.newGame = function()
 	$('#game-container').focus();
 }
 
-
 Game.prototype.setAutomated = function(automated)
 {
 	if(this.automated && !automated)

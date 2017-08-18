@@ -60,6 +60,7 @@ button
 {
 	margin: 5px;
 	height: 30px;
+	width: 100px;
 	background-color: hsla(0, 40%, 60%, 1);
 	border: none;
 	outline: none;
@@ -132,6 +133,8 @@ section#automated-tools #editor
 section#automated-tools button
 {
 	float: right;
+	margin-right: 0px;
+	margin-top: 15px;
 }
 
 div#game-over
