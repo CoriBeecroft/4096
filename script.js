@@ -16,7 +16,6 @@ $(document).ready(function()
 
 	game = new Game(grid);
 	game.automatedAlgorithm = editor.getValue();
-	console.log(editor.getValue());
 	
 	//
 	//	Attach input handlers
