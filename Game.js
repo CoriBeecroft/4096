@@ -1,6 +1,6 @@
 var Game = function(grid, automatedAlgorithm)
 {
-	this.developmentMode = true;
+	this.developmentMode = false;
 
 	this.winValue = 4096;
 	this.winHasBeenCommunicated = false;
@@ -16,7 +16,6 @@ var Game = function(grid, automatedAlgorithm)
 	
 	this.automated = false;
 	this.automatedInterval;
-	this.automatedGameSpeed = this.developmentMode ? 30 : 300;		//Milliseconds per automated turn
 	
 	this.keyHandlingInProgress = false;
 	this.movesQueue = [];
@@ -25,6 +24,11 @@ var Game = function(grid, automatedAlgorithm)
 	//Add tiles
 	this.tileManager.addTile();
 	this.tileManager.addTile();
+}
+
+Game.prototype.getAutomatedGameSpeed = function() {
+	console.log(this.developmentMode);
+	return this.developmentMode ? 30 : 300;		//Milliseconds per automated turn
 }
 
 Game.prototype.queueMove = function(input)
@@ -87,7 +91,7 @@ Game.prototype.setAutomated = function(automated)
 		this.automatedAlgorithm = editor.getValue();
 		$('button.toggle-automation').text("Stop Automation");	
 
-		if(this.automatedGameSpeed < 200)
+		if(this.getAutomatedGameSpeed() < 200)
 		{
 			this.animated = false;
 		}
@@ -102,7 +106,7 @@ Game.prototype.setAutomated = function(automated)
 			{
 				this.handleDeath();
 			}
-		}, this), this.automatedGameSpeed);
+		}, this), this.getAutomatedGameSpeed());
 	}
 	else
 	{

@@ -6,6 +6,7 @@ var RIGHT = 39;
 var UP = 38;
 var DOWN = 40;
 var A = 65;
+var D = 68;
 var N = 78;
 
 $(document).ready(function()
@@ -51,6 +52,7 @@ var keydownHandler = function(e)
 	{
 		e.preventDefault();
 		e.stopPropagation();
+
 		switch(key)
 		{
 			case A: 
@@ -59,6 +61,9 @@ var keydownHandler = function(e)
 			case N:
 				game.newGame();
 				break;
+			case D: 
+				game.developmentMode = !game.developmentMode;
+				break; 
 			case LEFT:
 				game.queueMove('left');
 				break;
@@ -79,7 +84,7 @@ var keydownHandler = function(e)
 
 var isValidKey = function(keyCode)
 {
-	var validKeys = [LEFT, RIGHT, UP, DOWN, A, N];
+	var validKeys = [LEFT, RIGHT, UP, DOWN, A, N, D];
 	for(var i=0; i<validKeys.length; i++)
 	{
 		if(keyCode == validKeys[i])
