@@ -26,7 +26,8 @@ var Game = function(grid, automatedAlgorithm)
 	this.tileManager.addTile();
 }
 
-Game.prototype.getAutomatedGameSpeed = function() {
+Game.prototype.getAutomatedGameSpeed = function() 
+{
 	return this.developmentMode ? 30 : 300;		//Milliseconds per automated turn
 }
 
