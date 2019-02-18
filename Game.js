@@ -89,7 +89,7 @@ Game.prototype.setAutomated = function(automated)
 	if(this.automated)
 	{
 		this.automatedAlgorithm = editor.getValue();
-		$('button.toggle-automation').text("Stop Automation");	
+		$('button.toggle-automation').text("Stop\u00A0Automation");
 
 		if(this.getAutomatedGameSpeed() < 200)
 		{
@@ -110,7 +110,7 @@ Game.prototype.setAutomated = function(automated)
 	}
 	else
 	{
-		$('button.toggle-automation').text("Run Automation");
+		$('button.toggle-automation').text("Run\u00A0Automation");
 		this.animated = true;
 		$('#game-container').focus();
 	}
